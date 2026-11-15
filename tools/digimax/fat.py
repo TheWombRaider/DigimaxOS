@@ -166,13 +166,13 @@ def fingerprint_formatter(sector: bytes) -> str:
     """Best-effort guess of which formatter wrote a FAT boot sector (heuristic).
 
     Used to tell whether the *camera* formatted a card (SD-01 baseline). The camera rule comes
-    from the reference unit's internal memory (EXP-0003): blank OEM name, jump ``E9 00 00`` and
-    no boot code at all.
+    from the reference unit's internal memory (EXP-0003, corrected in EXP-0005): an OEM name of
+    eight NUL bytes, jump ``E9 00 00`` and no boot code at all.
     """
     oem = sector[3:11]
     fat32 = struct.unpack_from("<H", sector, 22)[0] == 0
     boot = sector[90 if fat32 else 62 : 510]
-    if oem == b" " * 8 and sector[0:3] == b"\xe9\x00\x00" and not any(boot):
+    if oem == b"\x00" * 8 and sector[0:3] == b"\xe9\x00\x00" and not any(boot):
         return "embedded camera formatter (matches Digimax A402 internal memory, EXP-0003)"
     text = oem.decode("ascii", "replace")
     for prefix, who in (
@@ -212,7 +212,7 @@ def parse_bpb(sector: bytes, offset_sector: int) -> FatInfo:
         fat_type = "FAT32"
 
     def _txt(raw: bytes) -> str:
-        return raw.decode("ascii", "replace").rstrip()
+        return raw.decode("ascii", "replace").rstrip(" \x00")
 
     ext = 64 if fat32 else 36  # offset of drive number in extended BPB
     sig = sector[ext + 2]

@@ -145,7 +145,7 @@ def test_a402_internal_memory_geometry(tmp_path: Path) -> None:
         fat_type="FAT12",
         partition_start=A402_INTERNAL_START,
         sectors_per_cluster=32,
-        oem="        ",
+        oem="\x00" * 8,
         jump=b"\xe9\x00\x00",
     )
     assert lay.fat_sectors == 3 and lay.clusters == 782  # same as observed on the unit
@@ -155,7 +155,22 @@ def test_a402_internal_memory_geometry(tmp_path: Path) -> None:
     assert r.partitions[0].type_code == 0x01
     assert r.fat.data_area_aligned is True  # 57 + 1 + 2*3 + 32 = 96 = 3 clusters
     assert r.fat.formatter_hint.startswith("embedded camera formatter")
+    assert r.fat.oem_name == ""
     assert r.dcf["folders"][0]["files"] == 3
+
+
+def test_space_padded_oem_is_not_the_camera(tmp_path: Path) -> None:
+    img = tmp_path / "spaces.img"
+    make_image(
+        img,
+        total_sectors=A402_INTERNAL_SECTORS,
+        fat_type="FAT12",
+        partition_start=A402_INTERNAL_START,
+        oem=" " * 8,
+        jump=b"\xe9\x00\x00",
+    )
+    r = analyse(str(img))
+    assert r.fat is not None and r.fat.formatter_hint.startswith("unknown")
 
 
 def test_formatter_fingerprints(tmp_path: Path) -> None:

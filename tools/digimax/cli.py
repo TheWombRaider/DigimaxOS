@@ -19,7 +19,7 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any
 
-from . import __version__, env, exposure, fat, firmware, usb
+from . import __version__, env, exif, exposure, fat, firmware, usb
 from .sd import addressing, registers
 from .sd.crc import command_frame, crc16_ccitt
 
@@ -345,6 +345,46 @@ def cmd_sd_crc16(args: argparse.Namespace) -> int:
     return EXIT_OK
 
 
+# -------------------------------------------------------------------------- exif
+def cmd_exif(args: argparse.Namespace) -> int:
+    """Privacy-preserving EXIF: identity + exposure tags only, never dates/GPS/owner fields."""
+    results: list[dict[str, Any]] = []
+    for name in args.files:
+        try:
+            with open(name, "rb") as f:
+                tags = exif.read_exif(f).tags
+            results.append({"file": name if args.show_names else None, "tags": tags})
+        except (OSError, exif.ExifError) as exc:
+            results.append({"file": name if args.show_names else None, "error": str(exc)})
+    summary: dict[str, dict[str, int]] = {}
+    for r in results:
+        for k, v in r.get("tags", {}).items():
+            summary.setdefault(k, {})
+            summary[k][str(v)] = summary[k].get(str(v), 0) + 1
+    payload = {"count": len(results), "summary": summary} if args.summary else {"files": results}
+
+    def human() -> None:
+        if args.summary:
+            print(f"{len(results)} files")
+            for k, counts in summary.items():
+                print(
+                    f"  {k:22} "
+                    + ", ".join(
+                        f"{v} x{n}" for v, n in sorted(counts.items(), key=lambda kv: -kv[1])
+                    )
+                )
+            return
+        for r in results:
+            print(
+                r["file"] or "<file>",
+                ":",
+                r.get("error") or ", ".join(f"{k}={v}" for k, v in r["tags"].items()),
+            )
+
+    emit(args, payload, human)
+    return EXIT_OK if all("error" not in r for r in results) else EXIT_FAIL
+
+
 # ---------------------------------------------------------------------- exposure
 def cmd_exposure_table(args: argparse.Namespace) -> int:
     cap = exposure.Capability()
@@ -484,6 +524,12 @@ def build_parser() -> argparse.ArgumentParser:
     s5 = sd.add_parser("crc16", help="CRC16-CCITT of a data block file")
     s5.add_argument("file")
     s5.set_defaults(fn=cmd_sd_crc16)
+
+    xf = sub.add_parser("exif", help="identity + exposure EXIF tags (never dates/GPS/owner)")
+    xf.add_argument("files", nargs="+")
+    xf.add_argument("--summary", action="store_true", help="aggregate counts only")
+    xf.add_argument("--show-names", action="store_true", help="include file names in output")
+    xf.set_defaults(fn=cmd_exif)
 
     ex = sub.add_parser("exposure", help="exposure model and M-mode UI mock").add_subparsers(
         dest="sub", required=True

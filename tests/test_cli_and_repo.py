@@ -167,3 +167,21 @@ def test_public_safety_scan_passes() -> None:
         [sys.executable, "scripts/check_public_safety.py"], cwd=ROOT, capture_output=True, text=True
     )
     assert res.returncode == 0, res.stdout
+
+
+def test_exif_cli_summary(tmp_path: Path, capsys) -> None:
+    from fractions import Fraction
+
+    from digimax.exif import build_test_jpeg
+
+    for i, t in enumerate((Fraction(1, 30), Fraction(1, 30), Fraction(250, 577))):
+        (tmp_path / f"S402{i:04d}.JPG").write_bytes(
+            build_test_jpeg({0x829A: (5, t), 0x8827: (3, 200)})
+        )
+    files = sorted(str(p) for p in tmp_path.iterdir())
+    code, out = run(capsys, "--json", "exif", "--summary", *files)
+    res = json.loads(out)
+    assert code == 0 and res["count"] == 3
+    assert res["summary"]["exposure_time"] == {"1/30": 2, "250/577": 1}
+    code, out = run(capsys, "--json", "exif", *files)
+    assert all(r["file"] is None for r in json.loads(out)["files"])  # names hidden by default
