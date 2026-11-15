@@ -30,10 +30,10 @@ def test_matrix_covers_documented_space() -> None:
     assert min(r["shutter_s"] for r in rows) == 0.001
     by_shutter = {r["shutter"]: r for r in rows}
     # EXP-0004: stock Night-mode menu values are observed (not yet timed); fast steps are candidates
-    for seen in ('8"', '6"', '4"', '3"', '2"', '1"', "1/2", "1/8"):
+    for seen in ('8"', '6"', '4"', '3"', '2"', '1"', "1/2", "1/4", "1/8"):
         assert by_shutter[seen]["shutter_status"] == "observed"
         assert by_shutter[seen]["stock_user_selectable"] is True
-    for cand in ("1/4", "1/15", "1/60", "1/1000"):
+    for cand in ("1/15", "1/60", "1/1000"):
         assert by_shutter[cand]["shutter_status"] == "candidate"
     # overall status is the weakest of shutter / aperture / ISO
     assert {r["status"] for r in rows} == {"candidate", "documented"}

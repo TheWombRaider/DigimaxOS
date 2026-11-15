@@ -8,8 +8,8 @@ Nothing here talks to a camera. It encodes:
   the UI can be reviewed and tested before any firmware work (spec 5.2).
 
 Shutter steps: the manuals give only the 8 s to 1/1000 s range. The stock
-Night-mode menu (EXP-0004) offers AUTO plus 8, 6, 4, 3, 2, 1, 1/2 and 1/8 s
-(1/4 s awaiting confirmation). Those values are OBSERVED, meaning they are
+Night-mode menu (EXP-0004) offers AUTO plus 8, 6, 4, 3, 2, 1, 1/2, 1/4 and 1/8 s.
+Those values are OBSERVED, meaning they are
 selectable in the stock UI, but their timing has not been measured yet. Faster
 steps appear only in the specification range (presumably reached by
 auto-exposure) and remain CANDIDATES until measured
@@ -33,7 +33,7 @@ CANDIDATE_SHUTTERS: tuple[Fraction, ...] = tuple(
 )  # fmt: skip
 # Values the owner saw in the stock Night-mode +/- menu (EXP-0004). The menu also offers AUTO.
 NIGHT_MODE_OBSERVED: frozenset[Fraction] = frozenset(
-    Fraction(x) for x in (8, 6, 4, 3, 2, 1, "1/2", "1/8")
+    Fraction(x) for x in (8, 6, 4, 3, 2, 1, "1/2", "1/4", "1/8")
 )
 DOCUMENTED_APERTURES: tuple[float, ...] = (3.5, 7.0)
 DOCUMENTED_ISOS: tuple[int, ...] = (100, 200, 400)

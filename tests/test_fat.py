@@ -196,3 +196,28 @@ def test_mkfs_fingerprint(tmp_path: Path) -> None:
     subprocess.run(["mkfs.fat", "-F", "16", str(img)], check=True, capture_output=True)
     r = analyse(str(img))
     assert r.fat is not None and r.fat.formatter_hint == "Linux dosfstools"
+
+
+def test_owner_card_style_formatter(tmp_path: Path) -> None:
+    """Layout seen on the owner's 512 MB card (EXP-0007): partition at LBA 32, FAT16, 16 KiB
+    clusters, jump EB 00 90, blank OEM, zero hidden-sector and CHS fields, data area NOT aligned."""
+    img = tmp_path / "card.img"
+    lay = make_image(
+        img,
+        total_sectors=A402_PART_START + A402_PART_SECTORS,
+        fat_type="FAT16",
+        partition_start=A402_PART_START,
+        sectors_per_cluster=32,
+        oem=" " * 8,
+        jump=b"\xeb\x00\x90",
+        hidden=0,
+        geometry=(0, 0),
+    )
+    with img.open("r+b") as f:
+        f.truncate(A402_CARD_SECTORS * 512)
+    assert lay.fat_sectors == 121 and lay.clusters == 30767  # same as the real card
+    r = analyse(str(img))
+    assert r.ok, r.errors
+    assert r.fat is not None
+    assert r.fat.formatter_hint.startswith("unidentified embedded formatter")
+    assert r.fat.data_area_aligned is False  # 32 + 1 + 2*121 + 32 = 307

@@ -73,6 +73,8 @@ def make_image(
     oem: str = "DGMXTEST",
     mbr: bool = True,
     jump: bytes | None = None,
+    hidden: int | None = None,
+    geometry: tuple[int, int] = (63, 255),
 ) -> Layout:
     start = partition_start if mbr else 0
     lay = _plan(total_sectors, start, fat_type, sectors_per_cluster)
@@ -127,9 +129,9 @@ def make_image(
             vol if vol < 65536 and fat_type != "FAT32" else 0,
             0xF8,
             0 if fat_type == "FAT32" else lay.fat_sectors,
-            63,
-            255,
-            start,
+            geometry[0],
+            geometry[1],
+            start if hidden is None else hidden,
             0 if (vol < 65536 and fat_type != "FAT32") else vol,
         )
         if fat_type == "FAT32":

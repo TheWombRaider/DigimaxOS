@@ -174,6 +174,8 @@ def fingerprint_formatter(sector: bytes) -> str:
     boot = sector[90 if fat32 else 62 : 510]
     if oem == b"\x00" * 8 and sector[0:3] == b"\xe9\x00\x00" and not any(boot):
         return "embedded camera formatter (matches Digimax A402 internal memory, EXP-0003)"
+    if oem == b" " * 8 and sector[0:3] == b"\xeb\x00\x90" and not any(boot):
+        return "unidentified embedded formatter (jump EB 00 90, blank OEM, no boot code; EXP-0007)"
     text = oem.decode("ascii", "replace")
     for prefix, who in (
         ("MSDOS5.0", "Windows / DOS"),
