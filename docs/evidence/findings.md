@@ -61,7 +61,7 @@ Each finding has an ID, a confidence level and its evidence. Do not delete entri
 |---|---|---|---|
 | F-040 | Documented exposure space: shutter 2–1/1000 s (8–1/1000 s in Night mode), F3.5 and F7.0, ISO Auto/100/200/400, EV ±2 in 0.5 steps, multi/spot metering. | documented | S1 |
 | F-041 | Night mode lets the user choose shutter (LEFT/RIGHT) and aperture (UP/DOWN) from a +/- screen. The individual shutter steps are **not documented** in the text we have. | documented | S2 |
-| F-044 | The stock Night-mode shutter menu offers **AUTO, 1/8, 1/2, 1, 2, 3, 4, 6, 8 s** (1/4 s unconfirmed). Manual shutter control is limited to slow speeds; nothing faster than 1/8 s is user-selectable. | observed (UI, owner report) | EXP-0004 |
+| F-044 | The stock Night-mode shutter menu offers **AUTO, 1/8, 1/4, 1/2, 1, 2, 3, 4, 6, 8 s**. Manual shutter control is limited to slow speeds; nothing faster than 1/8 s is user-selectable. | observed (UI, owner report) | EXP-0004 |
 | F-045 | In Night mode the aperture screen offers AUTO, F3.5 and F7. Night is the only mode in which the owner could change any exposure setting. **ISO cannot be changed** in Night mode, and the owner could not find an ISO control in other modes either (S1 documents ISO Auto/100/200/400, so Program mode needs checking). Flash and self-timer remain adjustable. | observed (UI, owner report) | EXP-0004 |
 | F-042 | The lens is fixed focus with a two-position mechanical switch. There is no focus motor to control. | documented | S1 |
 | F-043 | The block diagram includes a motor driver (Sanyo LB1846M). On a fixed-focus, fixed-focal-length camera this probably drives the shutter and/or the aperture/ND mechanism, so "F7" may be an aperture plate or ND rather than an iris. This is a hypothesis (H-004). | inferred | S3 |
@@ -74,4 +74,13 @@ Each finding has an ID, a confidence level and its evidence. Do not delete entri
 | F-047 | The NAND is 1024 × 16 KiB blocks. Blocks 809–1023 (215 blocks, 3.36 MiB) are a reserved region that USB never exposes, the leading candidate for the firmware. The visible LUN is exactly 785 blocks; about 24 blocks are FTL overhead. | inferred (arithmetic consistent; NAND part not read) | EXP-0002, EXP-0005 |
 | F-048 | Auto-exposure writes continuously variable exposure times (e.g. 1000/18467 s). The shutter is controlled in fine time units, not stops. | observed | EXP-0006 |
 | F-049 | In 26 Program-mode captures: F3.5 and ISO 200 every time; centre-weighted metering; EV 0; flash fired 23×. | observed (casual scenes) | EXP-0006 |
+| F-051 | Night-mode shutter and aperture selections are **not persistent**: they reset when the mode changes, even with the camera kept on. | observed (owner) | EXP-0004 |
 | F-050 | Two consecutive raw reads of the internal-memory LUN are byte-identical (SHA-256 `b76a6504…`). The **user area** reads back reproducibly over USB; the reserved/firmware region does not appear in it. | verified | EXP-0005 |
+
+## Owner's SD card (from EXP-0007)
+
+| ID | Finding | Confidence | Evidence |
+|---|---|---|---|
+| F-052 | The owner's card carries a different, unidentified embedded formatter's fingerprint: jump `EB 00 90`, blank (space) OEM, no boot code, zero hidden/CHS fields, data area not cluster-aligned, non-bootable MBR entry at LBA 32. This differs from the camera's internal-memory format (F-028). | observed | EXP-0007 |
+| F-053 | Four card photos have EXIF Orientation 6/8, while all 26 internal ones have 1. The A402 has no orientation sensor, so card EXIF has probably been rewritten by a host or other device. | inferred | EXP-0006, EXP-0007 |
+| F-054 | Across 44 stock Program shots, AE always used **F3.5 and ISO 200**, with continuous exposure times from 1/30 to 0.93 s. | observed (casual scenes) | EXP-0006, EXP-0007 |

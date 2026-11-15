@@ -25,5 +25,7 @@ ship, will be versioned separately and scoped to exact base-firmware hashes.
 - Exposure model: per-value shutter status; stock Night-mode values marked `observed` (EXP-0004).
 - `digimax exif`: privacy-preserving EXIF reader (stdlib) with `--summary` aggregation.
 
+- `card check` recognises a second embedded-formatter fingerprint (`EB 00 90`, EXP-0007).
+
 ### Fixed
 - Camera formatter fingerprint: the OEM name is eight NUL bytes, not spaces (EXP-0005).

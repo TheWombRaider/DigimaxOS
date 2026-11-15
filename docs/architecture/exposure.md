@@ -58,7 +58,8 @@ the state machine (`tools/digimax/exposure.py`).
    EXIF alone proves nothing.
 5. Flash: explicit Off/On/Slow-sync choice using the stock flash timing. Never change charge
    control.
-6. Persistence: a versioned, checksummed record in an isolated, verified configuration area. If no
+6. Persistence: the stock Night mode keeps nothing, not even across a mode change (F-051), so any
+   persistence is new behaviour and must be opt-in and resettable. Store it as a versioned, checksummed record in an isolated, verified configuration area. If no
    safe area is found, settings last for the session only. Never write undocumented EEPROM or
    calibration offsets.
 7. All stock modes and factory reset keep working unchanged.

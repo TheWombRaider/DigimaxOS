@@ -9,7 +9,7 @@ filesystem and who formatted it.
 | Internal memory | 25,120 sectors (≈12.3 MiB usable) | FAT12, camera-formatted, holds camera-written DCF images | — | EXP-0002, EXP-0003 |
 | MMC | ≤ 128 MB | untested | — | — |
 | SDSC | 128 / 256 MB | untested | — | — |
-| SDSC | 512 MB (guaranteed) | **enumerates over USB; card holds camera-written DCF folder** (capture/playback not yet exercised in a controlled test) | — | EXP-0001 |
+| SDSC | 512 MB (guaranteed) | **enumerates over USB; holds camera-written DCF images** (FAT16, 16 KiB clusters; formatted by an unidentified device; capture/playback not yet exercised in a controlled test) | — | EXP-0001, EXP-0007 |
 | SDSC | 1 GB | untested (SD-01) | — | — |
 | SDSC | 2 GB | untested (SD-01) | — | — |
 | SDSC (non-standard "4 GB") | 4 GB | not recommended; will not be pursued | — | spec 4.1 |

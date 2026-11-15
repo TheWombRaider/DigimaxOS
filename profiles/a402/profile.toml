@@ -52,7 +52,7 @@ flashrom = "unknown - schematic section titled 'FlashROM-NandFlash-SD' (S3 p.55)
 internal_flash_bytes = "16 MB (documented, S1)"
 card_slot = "SD / MMC (documented, S1); 512 MB guaranteed (documented)"
 controller_mode = "unknown (native SD vs SPI)"
-observed_cards = ["EXP-0001: ~512 MB SDSC card, 985088 sectors, MBR + FAT16 (type 0x06), 16 KiB clusters"]
+observed_cards = ["EXP-0001/EXP-0007: ~512 MB SDSC card, 985088 sectors, MBR + FAT16 (type 0x06) at LBA 32, 16 KiB clusters, unidentified embedded formatter (EB 00 90), data area unaligned"]
 lun_switching = "single LUN: the card when inserted, otherwise internal memory (EXP-0001, EXP-0002)"
 
 [storage.internal]
@@ -102,9 +102,9 @@ aperture_f_numbers = [3.5, 7.0]
 aperture_mechanism = "unknown (iris vs ND/aperture plate not established)"
 shutter_range_s = { normal = [2.0, 0.001], night = [8.0, 0.001] }
 shutter_steps = "unknown - manuals give range only"
-night_mode_shutter_menu = { status = "observed", experiment = "EXP-0004", values = ["AUTO", "1/8", "1/2", "1", "2", "3", "4", "6", "8"], unconfirmed = ["1/4"] }
+night_mode_shutter_menu = { status = "observed", experiment = "EXP-0004", values = ["AUTO", "1/8", "1/4", "1/2", "1", "2", "3", "4", "6", "8"], persistent = false }
 night_mode_controls = { status = "observed", experiment = "EXP-0004", aperture = ["AUTO", "F3.5", "F7"], iso = "not adjustable", flash = "adjustable", self_timer = "adjustable" }
 ev_compensation = { range = 2.0, step = 0.5 }
-program_ae_observed = { experiment = "EXP-0006", n = 26, f_number = [3.5], iso = [200], shutter = "continuously variable (e.g. 1000/18467 s)", metering = "centre-weighted (2)" }
+program_ae_observed = { experiment = "EXP-0006, EXP-0007", n = 44, f_number = [3.5], iso = [200], shutter = "continuously variable, 1/30 to 0.93 s observed", metering = "centre-weighted (2)" }
 user_adjustable_modes = ["night"]  # EXP-0004: no other mode exposes exposure settings
 focus = "fixed focus, two-step mechanical switch (macro 0.2 m / normal 1.0 m-inf)"

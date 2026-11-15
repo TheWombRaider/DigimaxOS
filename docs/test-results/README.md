@@ -12,3 +12,4 @@ serial numbers, no owner EXIF fields and no OEM bytes. Each result links to its 
 | 2026-11-15 | [EXP-0004](../evidence/experiments/EXP-0004-night-mode-shutter-menu.md) | Night-mode manual shutter: AUTO, 1/8–8 s only (1/4 unconfirmed) |
 | 2026-11-15 | [EXP-0005](../evidence/experiments/EXP-0005-internal-lun-image-and-nand-reserve.md) | Reproducible LUN readback; `NAND RSV` table: blocks 809–1023 reserved (firmware candidate) |
 | 2026-11-15 | [EXP-0006](../evidence/experiments/EXP-0006-program-ae-exif-statistics.md) | AE shutter is continuously variable; F3.5 / ISO 200 in all 26 shots |
+| 2026-11-15 | [EXP-0007](../evidence/experiments/EXP-0007-owner-card-layout-and-exif.md) | Owner card has an unidentified embedded format (not the camera's internal style); 44-shot AE stats: F3.5 / ISO 200 always |

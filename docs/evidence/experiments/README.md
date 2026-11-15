@@ -9,9 +9,10 @@ their SHA-256 hashes are recorded here.
 | [EXP-0001](EXP-0001-usb-enumeration.md) | USB enumeration of the reference unit | observed on stock | done |
 | [EXP-0002](EXP-0002-internal-memory-lun.md) | USB enumeration with no card (internal memory) | observed on stock | done |
 | [EXP-0003](EXP-0003-firmware-version-and-boot-sectors.md) | Firmware version (EXIF) and internal-memory boot sectors | observed on stock | done |
-| [EXP-0004](EXP-0004-night-mode-shutter-menu.md) | Stock Night-mode menu walk-through | observed on stock (UI) | done (1/4 s and persistence pending) |
+| [EXP-0004](EXP-0004-night-mode-shutter-menu.md) | Stock Night-mode menu walk-through | observed on stock (UI) | done |
 | [EXP-0005](EXP-0005-internal-lun-image-and-nand-reserve.md) | Read-only internal-LUN image; NAND reserve table | observed on stock | done |
 | [EXP-0006](EXP-0006-program-ae-exif-statistics.md) | Program-AE exposure statistics from EXIF | observed on stock | done |
+| [EXP-0007](EXP-0007-owner-card-layout-and-exif.md) | Owner's SD card: boot area, formatter, EXIF statistics | observed on stock | done |
 
 ## Template
 

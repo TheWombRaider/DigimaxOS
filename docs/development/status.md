@@ -23,9 +23,10 @@ region**, so recovery needs another path (#4). **Nothing has been written to the
 byte-identically (F-050). A private, hashed image exists in the workspace (EXP-0005).
 
 **Exposure facts:** Night is the only mode with user exposure control: shutter AUTO and 1/8–8 s
-(1/4 unconfirmed), aperture AUTO/F3.5/F7, and no ISO control (F-044, F-045). Program AE uses
+(including 1/4), aperture AUTO/F3.5/F7, no ISO control, and no persistence even across a mode
+change (F-044, F-045, F-051). Program AE uses
 continuously variable shutter times (F-048), which supports an M mode with fine shutter steps
-(H-012). In all 26 Program shots, AE used F3.5 and ISO 200 (F-049).
+(H-012). In all 44 Program shots (internal memory and card), AE used F3.5 and ISO 200 (F-054).
 
 **Host tooling:** `digimax` CLI v0.1.0.dev0, stdlib only. 101 tests pass locally. CI
 (`.github/workflows/ci.yml`) runs on Python 3.11/3.12/3.13.
@@ -48,8 +49,8 @@ firmware and hardware-write review.
 4. **Controlled exposure series** ([#6](https://github.com/TheWombRaider/DigimaxOS/issues/6)):
    bright-scene Program shots (does AE ever pick F7, other ISOs, or speeds faster than 1/30?), and
    timed Night-mode captures at each menu value.
-5. **SD card data** (owner card, read permission granted): EXIF statistics of the 18 card JPEGs, and
-   card sectors 0/32 for the formatter fingerprint. This needs the card reinserted.
+5. **Settle the card formatter** (F-052): format an *expendable* card in the camera and compare its
+   fingerprint with F-028 and F-052. This needs test media (#8).
 6. **Schematic transcription** ([#13](https://github.com/TheWombRaider/DigimaxOS/issues/13)), **test
    media** ([#8](https://github.com/TheWombRaider/DigimaxOS/issues/8)), **battery drain** (POWER-01).
 
@@ -57,7 +58,6 @@ firmware and hardware-write review.
 
 | Item | Needs |
 |---|---|
-| Card sector 0/32 read and EXIF statistics | the card reinserted (read permission granted 2026-11-15) |
 | Night-mode menu walk-through | someone physically at the camera |
 | SD capacity tests | expendable cards (purchase decision is the owner's) |
 | Donor camera for recovery work | purchase decision is the owner's |
@@ -111,4 +111,10 @@ firmware and hardware-write review.
 - EXP-0006: EXIF of 26 Program shots shows continuously variable shutter times, with F3.5 and ISO 200
   throughout.
 - Added the privacy-preserving `digimax exif` command (identity and exposure tags only) with tests.
+- The owner confirmed the 1/4 s Night step and that Night settings don't persist even across a mode
+  change (F-051).
+- EXP-0007 (card back in, read-only): the owner's card has an unidentified embedded format
+  (`EB 00 90`, unaligned), unlike the camera's internal format. 4/18 card photos have EXIF rotation
+  written elsewhere. Across 44 shots, AE always used F3.5 and ISO 200. `card check` fingerprints this
+  second formatter.
 
