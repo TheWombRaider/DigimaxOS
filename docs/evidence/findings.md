@@ -40,7 +40,11 @@ Each finding has an ID, a confidence level and its evidence. Do not delete entri
 | F-022 | That layout (partition at sector 32, FAT16, 32 sectors per cluster) matches the SD Association's recommended format for 257–512 MB cards. *Who* formatted it (camera, PC, factory) is unknown until the boot sector's OEM name is read, which needs owner approval. | inferred | EXP-0001, S4 |
 | F-023 | The card holds a DCF tree `DCIM\100SSCAM`. The firmware's DCF folder suffix is therefore probably `SSCAM`. This is to be confirmed by observing a folder the camera creates itself. | verified (presence) / inferred (creator) | EXP-0001 |
 | F-024 | The manual guarantees cards only up to 512 MB. Larger SDSC cards have not been tested. The 512 MB figure is a guarantee, not a proven limit. | documented | S1 |
-| F-025 | Windows created a `System Volume Information` folder on the owner's card when it was mounted read-write. Future sessions should avoid further host writes (eject safely; prefer read-only imaging). | verified | EXP-0001 |
+| F-025 | Windows created a `System Volume Information` folder on the owner's card **and in internal memory** (EXP-0002) when they were mounted read-write. Future sessions should avoid further host writes (eject safely; prefer read-only imaging or a read-only mount policy). | verified | EXP-0001, EXP-0002 |
+| F-026 | The camera exposes a single USB LUN: the card when one is inserted, otherwise internal memory. The USB identity is the same in both cases. | verified | EXP-0001, EXP-0002 |
+| F-027 | The internal-memory LUN is 25,120 sectors (12,861,440 bytes). Against the documented 16 MB NAND, about 3.73 MiB is not exposed to the host, which is the probable home of firmware and reserved blocks (H-010). | verified (size) / inferred (purpose) | EXP-0002, S3 |
+| F-028 | The camera's own formatter (seen on internal memory) writes MBR + FAT12 (type 0x01, bootable flag set) at LBA 57, 16 KiB clusters, 2×3-sector FATs and 512 root entries. It leaves a blank OEM name, jump `E9 00 00` and no boot code, and aligns the data area to the cluster size (LBA 96). The MBR boot code is all zero. | verified | EXP-0003 |
+| F-029 | DCF names on this unit: folder `100SSCAM`, files `S402nnnn.JPG`. EXIF 2.20 and FlashPix 1.00. | verified | EXP-0003 |
 
 ## Firmware acquisition
 
@@ -49,6 +53,7 @@ Each finding has an ID, a confidence level and its evidence. Do not delete entri
 | F-030 | The official Samsung support page for the A402 offers **no firmware**, only a 2008-dated USB driver and the manual. | documented | S9 |
 | F-031 | The service manual's upgrade procedure: download "MEGA536" from the Samsung service site, format the card in the camera, copy the file onto the camera's removable disk over USB (not a card reader), then check the file name. No extension, folder or key combination is given. That the file must be copied *through the camera* (not with a reader) is notable. Why is unknown. | documented | S3 |
 | F-032 | A public web search (2026-11-14) found no copy of `MEGA536` or any A402/D402 firmware file. The driver package contains no firmware. | negative result | S9, S10, searches recorded in the 2026-11-14 entry of docs/development/status.md |
+| F-033 | The reference unit's firmware identifies itself as **`M4051S-0525`** (EXIF Software tag). The same string appears on another A402's 2006 photo. A `-0520` variant is reported by a search snippet but is unverified, so more than one build may have been released. | verified (own unit) / documented (S16) / unverified (S17) | EXP-0003, S16, S17 |
 
 ## Exposure
 

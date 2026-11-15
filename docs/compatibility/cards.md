@@ -6,6 +6,7 @@ filesystem and who formatted it.
 
 | Class | Capacity | Stock result | DigimaxOS result | Evidence |
 |---|---|---|---|---|
+| Internal memory | 25,120 sectors (≈12.3 MiB usable) | FAT12, camera-formatted, holds camera-written DCF images | — | EXP-0002, EXP-0003 |
 | MMC | ≤ 128 MB | untested | — | — |
 | SDSC | 128 / 256 MB | untested | — | — |
 | SDSC | 512 MB (guaranteed) | **enumerates over USB; card holds camera-written DCF folder** (capture/playback not yet exercised in a controlled test) | — | EXP-0001 |

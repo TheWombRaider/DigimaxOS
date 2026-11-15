@@ -7,6 +7,8 @@ their SHA-256 hashes are recorded here.
 | ID | Title | Kind | Status |
 |---|---|---|---|
 | [EXP-0001](EXP-0001-usb-enumeration.md) | USB enumeration of the reference unit | observed on stock | done |
+| [EXP-0002](EXP-0002-internal-memory-lun.md) | USB enumeration with no card (internal memory) | observed on stock | done |
+| [EXP-0003](EXP-0003-firmware-version-and-boot-sectors.md) | Firmware version (EXIF) and internal-memory boot sectors | observed on stock | done |
 
 ## Template
 

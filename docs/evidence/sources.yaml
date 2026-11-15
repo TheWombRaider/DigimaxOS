@@ -181,6 +181,26 @@ sources:
     redistributable: false
     notes: Later Samsung compacts updated via i-Launcher or firmware copied to SD; context only.
 
+  - id: S16
+    title: Wikimedia Commons - File:S4020440.JPG (photo taken with a Digimax A402)
+    kind: observation
+    url: https://en.wikipedia.org/wiki/File:S4020440.JPG
+    retrieved: 2026-11-15
+    redistributable: unknown
+    notes: >-
+      Metadata shows Make "Samsung Techwin co., Ltd.", Model "Digimax A402", Software
+      "M4051S-0525", data generated 2006-02-12. Independent confirmation of the firmware string.
+
+  - id: S17
+    title: Web search snippet - Flickr photo reported with Software "M4051S-0520"
+    kind: observation
+    url: https://www.flickr.com/photos/46686135@N00/274080481/
+    retrieved: 2026-11-15
+    redistributable: unknown
+    notes: >-
+      A search engine summarised this photo's EXIF as Software M4051S-0520, but the fetched page
+      showed no Software field. UNVERIFIED; needs a direct EXIF read of the original file.
+
   - id: O1
     title: Reference unit observation - USB enumeration (EXP-0001)
     kind: observation
@@ -188,3 +208,11 @@ sources:
     retrieved: 2026-11-14
     redistributable: true
     notes: Sanitized; raw report kept in the private workspace.
+
+  - id: O2
+    title: Reference unit observations - internal memory LUN, firmware version, boot sectors
+    kind: observation
+    location: docs/evidence/experiments/EXP-0002-internal-memory-lun.md, docs/evidence/experiments/EXP-0003-firmware-version-and-boot-sectors.md
+    retrieved: 2026-11-15
+    redistributable: true
+    notes: Sanitized; raw outputs kept in the private workspace (hashes in the experiment files).

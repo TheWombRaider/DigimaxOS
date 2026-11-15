@@ -8,46 +8,58 @@ session and add a log entry. Never delete log entries.
 | Gate | State |
 |---|---|
 | G0 public repo + docs + host setup + device identification | **met**: repo public; device identified (EXP-0001) |
-| G1 verified firmware identity, provenance, ISA | **not met**: no firmware image; version unknown; ISA unknown |
+| G1 verified firmware identity, provenance, ISA | **partly met**: firmware **version** known (`M4051S-0525`, EXP-0003); no firmware **image**; ISA unknown |
 | G2 recovery | **not met**: see [recovery checklist](../recovery/README.md) (0/8) |
 | G3–G5 | not started |
 
-**Firmware status:** no original firmware image or update file exists anywhere in the project. The
-official Samsung site offers none (F-030), and public searches found none (F-032). **Nothing has
-been written to the camera.**
+**Firmware status:** the reference unit runs **`M4051S-0525`** (EXIF Software tag, F-033). No
+original firmware image or update file exists anywhere in the project. The official Samsung site
+offers none (F-030), and public searches found none (F-032). About 3.73 MiB of the 16 MB NAND is
+hidden from USB and is the likely firmware region (H-010). **Nothing has been written to the
+camera.**
 
-**Host tooling:** `digimax` CLI v0.1.0.dev0, stdlib only. 97 tests pass locally (unit, property-based
-and fixture tests, including dosfstools cross-checks). CI (`.github/workflows/ci.yml`) is green on Python 3.11/3.12/3.13 with 97 passed each.
+**Storage facts:** a single USB LUN, either the card or internal memory (F-026). Internal memory is
+25,120 sectors of FAT12, laid out by the camera's own formatter (F-027, F-028). `digimax card check`
+recognises that formatter's fingerprint.
 
-**Repository:** https://github.com/TheWombRaider/DigimaxOS. Issues #1–#15 are the backlog and #16 is the pinned rolling checkpoint. `main` is protected: required checks, linear history, no force-push. Required reviews are off while there is a single maintainer; CODEOWNERS and the PR checklist cover firmware and hardware-write review.
+**Host tooling:** `digimax` CLI v0.1.0.dev0, stdlib only. 101 tests pass locally. CI
+(`.github/workflows/ci.yml`) runs on Python 3.11/3.12/3.13.
+
+**Repository:** https://github.com/TheWombRaider/DigimaxOS. Issues #1–#15 are the backlog and #16 is
+the pinned rolling checkpoint. `main` is protected: required checks, linear history, no force-push.
+Required reviews are off while there is a single maintainer; CODEOWNERS and the PR checklist cover
+firmware and hardware-write review.
 
 ## Highest-value next actions
 
-1. **Firmware version** ([#2](https://github.com/TheWombRaider/DigimaxOS/issues/2), owner approval needed): read the EXIF `Software`/`Make`/`Model` tags from
-   one camera-made JPEG in place, or read the version from the camera's setup menu. This sets the
-   search target for `MEGA536`.
-2. **Firmware acquisition** ([#1](https://github.com/TheWombRaider/DigimaxOS/issues/1)): Wayback Machine captures of
-   samsungcamera.com/service, samsungimaging.com, Korean Kenox support pages and driver CDs. Record
-   the provenance of anything found, hash it and keep it private.
-3. **Internal-memory LUN and boot sector** ([#12](https://github.com/TheWombRaider/DigimaxOS/issues/12), owner approval needed): enumerate with no card
-   inserted (H-007); read only sectors 0 and 32 of the card (formatter OEM name, F-022).
-4. **Stock Night-mode baseline** ([#5](https://github.com/TheWombRaider/DigimaxOS/issues/5), owner present, scratch card): Phase 1A of the
-   [exposure test plan](../test-plans/exposure-baseline.md). It needs no captures, only menu
-   observation, and gives the real shutter steps.
-5. **Schematic transcription** ([#13](https://github.com/TheWombRaider/DigimaxOS/issues/13), offline): S3 web pp. 52–56, the SD/NAND/EEPROM/strap net names.
-6. **Test media** ([#8](https://github.com/TheWombRaider/DigimaxOS/issues/8), owner decision / purchase): expendable SDSC 1 GB and 2 GB cards and an SDHC
-   4 GB card for SD-01 and H-002.
+1. **Firmware acquisition** ([#1](https://github.com/TheWombRaider/DigimaxOS/issues/1)): search
+   with the concrete target `M4051S` / `MEGA536`. Use Wayback captures of samsungcamera.com/service
+   and samsungimaging.com, Kenox (Korea) support, and driver CDs. Also gather `Software` tags from
+   public A402/D402 photos to enumerate the builds (H-009).
+2. **Stock Night-mode menu walk-through** ([#5](https://github.com/TheWombRaider/DigimaxOS/issues/5)):
+   the owner is at the camera. No captures are needed, and the result gives the real shutter steps.
+3. **Sectors 1–56 of internal memory** (H-011): owner approval needed. They are outside the
+   filesystem and hold no photos.
+4. **Card boot sector** (F-022): when the SD card is back in, read sectors 0 and 32 (owner
+   approval). This tells us whether the camera formatted it, by comparing with the F-028
+   fingerprint.
+5. **Schematic transcription** ([#13](https://github.com/TheWombRaider/DigimaxOS/issues/13), offline).
+6. **Test media** ([#8](https://github.com/TheWombRaider/DigimaxOS/issues/8)): expendable SDSC
+   1 GB / 2 GB and SDHC 4 GB cards (purchase is the owner's decision).
+7. **Battery drain** (POWER-01): the owner reports heavy battery use. Measure the current draw
+   later.
 
 ## Blocked / waiting on the owner
 
 | Item | Needs |
 |---|---|
-| EXIF firmware-version read | approval to read the metadata of one existing photo in place |
-| Sector 0/32 read of the owner's card | approval (read-only, no personal data in those sectors) |
-| No-card enumeration, Night-mode menu walk-through | someone physically at the camera |
+| Sectors 1–56 read (internal memory) | approval (read-only, no user data) |
+| Sector 0/32 read of the owner's card | the card reinserted, plus approval |
+| Night-mode menu walk-through | someone physically at the camera |
 | SD capacity tests | expendable cards (purchase decision is the owner's) |
 | Donor camera for recovery work | purchase decision is the owner's |
 | Durable SSH access to the Windows host | the owner authorising an SSH key, instead of sharing a password per session |
+| Avoiding Windows host writes (System Volume Information) | optional: owner enables a read-only removable-storage policy on the Windows host |
 
 ## Environment facts
 
@@ -75,3 +87,14 @@ and fixture tests, including dosfstools cross-checks). CI (`.github/workflows/ci
 - Built the host CLI, the SD reference model and simulator, the FAT/DCF analyser, the firmware
   inspector, the exposure model and M-mode mock, the Windows collector, CI, the issue forms,
   labels (spec section 9), milestones v0.1–v1.0 and issues #1–#16.
+
+### 2026-11-15: internal memory and firmware version
+
+- The owner replaced the drained batteries with rechargeables. With no card, the camera exposed its
+  internal memory (EXP-0002): 25,120 sectors, FAT12 at LBA 57, about 3.73 MiB of NAND hidden.
+- With the owner's go-ahead, the EXIF Make/Model/Software tags of one JPEG were read in place, along
+  with raw sectors 0 and 57 (EXP-0003). Firmware is **`M4051S-0525`**, independently matched by a
+  2006 Wikimedia Commons A402 photo. A `-0520` build is reported but unverified.
+- Added a formatter fingerprint and cluster-alignment check to `digimax card check`, plus FAT12
+  fixtures reproducing the camera's exact internal layout (3-sector FATs, 782 clusters).
+

@@ -19,3 +19,6 @@ ship, will be versioned separately and scoped to exact base-firmware hashes.
 - Exposure capability model and proposed M-mode UI state machine with ASCII mock.
 - A402 device profile and evidence register (EXP-0001: USB identification of the reference unit).
 - `scripts/windows/Get-DigimaxInfo.ps1`: read-only collector for compatibility reports.
+- `card check` reports a formatter fingerprint (camera / Windows / dosfstools / macOS) and data-area
+  cluster alignment; FAT12 fixtures matching the A402 internal-memory layout.
+- EXP-0002/EXP-0003: internal-memory LUN geometry, firmware version `M4051S-0525`.

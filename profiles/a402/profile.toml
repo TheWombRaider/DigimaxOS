@@ -53,12 +53,35 @@ internal_flash_bytes = "16 MB (documented, S1)"
 card_slot = "SD / MMC (documented, S1); 512 MB guaranteed (documented)"
 controller_mode = "unknown (native SD vs SPI)"
 observed_cards = ["EXP-0001: ~512 MB SDSC card, 985088 sectors, MBR + FAT16 (type 0x06), 16 KiB clusters"]
+lun_switching = "single LUN: the card when inserted, otherwise internal memory (EXP-0001, EXP-0002)"
+
+[storage.internal]
+status = "verified"
+experiment = "EXP-0002, EXP-0003"
+lun_sectors = 25120          # 12,861,440 bytes exposed of the documented 16 MB NAND
+hidden_bytes_estimate = 3915776  # 16 MiB - exposed; presumably firmware/reserved/spare (H-010)
+partition = { type = 0x01, start = 57, sectors = 25063, bootable = true }
+filesystem = "FAT12, 32 sectors/cluster (16 KiB), 2 FATs x 3 sectors, 512 root entries, 782 clusters"
+formatter = "camera (blank OEM name, jump E9 00 00, no boot code); data area aligned to cluster (LBA 96)"
+pre_partition_gap = "sectors 1-56 are not all zero; contents not examined (H-011)"
 
 [firmware]
-status = "unknown"
-version = "unknown"
+status = "verified"
+experiment = "EXP-0003"
+version = "M4051S-0525"   # EXIF Software tag written by the reference unit
+version_source = "EXIF 0x0131 (Software) of a camera-made JPEG; Make 'Samsung Techwin co., Ltd.', Model 'Digimax A402'"
+other_versions_seen = ["M4051S-0525 (S16, another A402, 2006)", "M4051S-0520 (S17 search snippet only, unverified)"]
 update_file_label = "MEGA536 (S3 p.32, extension unknown)"
 base_hashes = []  # filled only from lawfully obtained, verified images
+
+[dcf]
+status = "verified"
+experiment = "EXP-0003"
+folder = "100SSCAM"
+file_prefix = "S402"      # e.g. S402nnnn.JPG
+exif_version = "0220"
+flashpix_version = "0100"
+max_image = [2272, 1704]
 
 [exposure]
 status = "documented"

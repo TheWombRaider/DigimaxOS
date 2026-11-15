@@ -83,6 +83,10 @@ The full register is in [docs/evidence/findings.md](docs/evidence/findings.md). 
   USB mass-storage device (class 08/06/50, Bulk-Only Transport, bcdDevice 1.00). Its SCSI identity
   is `SAMSUNG` / `DIGITAL CAMERA` / `1.00` ([EXP-0001](docs/evidence/experiments/EXP-0001-usb-enumeration.md)).
   This ID does not appear in the public `usb.ids` database.
+- The reference unit runs firmware **`M4051S-0525`** (from its EXIF `Software` tag,
+  [EXP-0003](docs/evidence/experiments/EXP-0003-firmware-version-and-boot-sectors.md)). With no card
+  inserted, the camera shows its internal memory: 25,120 sectors of FAT12. About 3.7 MiB of the
+  16 MB NAND stays hidden from USB and probably holds the firmware.
 - The official Samsung driver package says the A402 and the **Kenox D402** are the same product
   family.
 - The service manual names **Sunplus SPCA536** in its schematic section titles but **SPCA535** in its block
