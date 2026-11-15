@@ -8,7 +8,7 @@ owner has explicitly approved that specific action.
 
 | # | Requirement | Status |
 |---|---|---|
-| R1 | Original firmware identified: exact version string, and the source of the image or dump with its provenance | ✗ unknown |
+| R1 | Original firmware identified: exact version string, and the source of the image or dump with its provenance | ✗ partial: version `M4051S-0525` known (F-033); no image |
 | R2 | Complete, reproducible readback of every persistent store: boot ROM/NOR (if present), NAND including spare/OOB and the bad-block map, EEPROM (93C66). At least 3 independent reads must be byte-identical, apart from explained, naturally varying fields. | ✗ partial: the user-area LUN reads back byte-identically (F-050), but the reserved/firmware blocks 809–1023 are **not reachable over USB** (F-047) |
 | R3 | Per-device calibration identified and backed up separately (shutter, bad pixels, battery, colour). Restore has been verified. | ✗ |
 | R4 | An **independent** recovery path that works when the application firmware is broken: a boot-ROM USB/serial loader, a card-based loader that runs before application code, or an external programmer on a donor board. An ordinary updater that needs working firmware does **not** count. | ✗ unknown |
