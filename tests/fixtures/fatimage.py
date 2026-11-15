@@ -30,12 +30,12 @@ def _plan(total: int, start: int, fat_type: str, spc: int) -> Layout:
     reserved = 32 if fat_type == "FAT32" else 1
     root_entries = 0 if fat_type == "FAT32" else 512
     root_secs = root_entries * 32 // SECTOR
-    entry = 4 if fat_type == "FAT32" else 2
+    entry = {"FAT32": 4.0, "FAT16": 2.0, "FAT12": 1.5}[fat_type]
     fat_secs = 1
     while True:
         data = vol - reserved - 2 * fat_secs - root_secs
         clusters = data // spc
-        need = ((clusters + 2) * entry + SECTOR - 1) // SECTOR
+        need = (int((clusters + 2) * entry + 0.5) + SECTOR - 1) // SECTOR
         if need <= fat_secs:
             break
         fat_secs = need
@@ -72,11 +72,14 @@ def make_image(
     photos: int = 3,
     oem: str = "DGMXTEST",
     mbr: bool = True,
+    jump: bytes | None = None,
 ) -> Layout:
     start = partition_start if mbr else 0
     lay = _plan(total_sectors, start, fat_type, sectors_per_cluster)
     ptype = (
-        partition_type if partition_type is not None else (0x0C if fat_type == "FAT32" else 0x06)
+        partition_type
+        if partition_type is not None
+        else {"FAT32": 0x0C, "FAT16": 0x06, "FAT12": 0x01}[fat_type]
     )
     cluster_bytes = SECTOR * sectors_per_cluster
     root_secs = lay.root_entries * 32 // SECTOR
@@ -109,7 +112,7 @@ def make_image(
             put(0, bytes(m))
 
         b = bytearray(SECTOR)
-        b[0:3] = b"\xeb\x58\x90" if fat_type == "FAT32" else b"\xeb\x3c\x90"
+        b[0:3] = jump or (b"\xeb\x58\x90" if fat_type == "FAT32" else b"\xeb\x3c\x90")
         b[3:11] = oem.ljust(8).encode()[:8]
         vol = total_sectors - start
         struct.pack_into(
@@ -136,7 +139,15 @@ def make_image(
             )
         else:
             struct.pack_into(
-                "<BBBI11s8s", b, 36, 0x80, 0, 0x29, 0x12345678, b"NO NAME    ", b"FAT16   "
+                "<BBBI11s8s",
+                b,
+                36,
+                0x80,
+                0,
+                0x29,
+                0x12345678,
+                b"NO NAME    ",
+                fat_type.ljust(8).encode(),
             )
         b[510:512] = b"\x55\xaa"
         put(start, bytes(b))
@@ -159,14 +170,30 @@ def make_image(
             put(start + 1, bytes(fsi))
             put(start + 6, bytes(b))
 
-        eoc = 0x0FFFFFFF if fat_type == "FAT32" else 0xFFFF
-        fmt = "<I" if fat_type == "FAT32" else "<H"
-        size = 4 if fat_type == "FAT32" else 2
         fat = bytearray(lay.fat_sectors * SECTOR)
-        struct.pack_into(fmt, fat, 0, (0x0FFFFFF8 if fat_type == "FAT32" else 0xFFF8))
-        struct.pack_into(fmt, fat, size, eoc)
-        for c in used:
-            struct.pack_into(fmt, fat, c * size, eoc)
+        if fat_type == "FAT12":
+
+            def set12(c: int, v: int) -> None:
+                off = c + c // 2
+                if c & 1:
+                    fat[off] = (fat[off] & 0x0F) | ((v << 4) & 0xF0)
+                    fat[off + 1] = (v >> 4) & 0xFF
+                else:
+                    fat[off] = v & 0xFF
+                    fat[off + 1] = (fat[off + 1] & 0xF0) | ((v >> 8) & 0x0F)
+
+            set12(0, 0xFF8)
+            set12(1, 0xFFF)
+            for c in used:
+                set12(c, 0xFFF)
+        else:
+            eoc = 0x0FFFFFFF if fat_type == "FAT32" else 0xFFFF
+            fmt = "<I" if fat_type == "FAT32" else "<H"
+            size = 4 if fat_type == "FAT32" else 2
+            struct.pack_into(fmt, fat, 0, (0x0FFFFFF8 if fat_type == "FAT32" else 0xFFF8))
+            struct.pack_into(fmt, fat, size, eoc)
+            for c in used:
+                struct.pack_into(fmt, fat, c * size, eoc)
         for copy in range(2):
             put(start + lay.reserved + copy * lay.fat_sectors, bytes(fat))
 

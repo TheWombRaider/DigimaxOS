@@ -192,6 +192,9 @@ def cmd_card_check(args: argparse.Namespace) -> int:
                 f"{f.cluster_bytes} bytes, {f.num_fats} FATs x {f.fat_sectors} sectors, "
                 f"label {f.volume_label!r}, fs-type string {f.fs_type_label!r}"
             )
+            print(
+                f"  formatter: {f.formatter_hint}; data area cluster-aligned: {f.data_area_aligned}"
+            )
             if f.computed_free_clusters is not None:
                 print(
                     f"  free: {f.computed_free_clusters} clusters "

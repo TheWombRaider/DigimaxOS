@@ -76,6 +76,8 @@ class FatInfo:
     fsinfo_free_count: int | None = None
     fsinfo_next_free: int | None = None
     computed_free_clusters: int | None = None
+    formatter_hint: str = "unknown"
+    data_area_aligned: bool | None = None  # first data sector is a multiple of the cluster size
 
 
 @dataclass
@@ -160,6 +162,31 @@ def parse_mbr(sector: bytes) -> list[Partition]:
     return parts
 
 
+def fingerprint_formatter(sector: bytes) -> str:
+    """Best-effort guess of which formatter wrote a FAT boot sector (heuristic).
+
+    Used to tell whether the *camera* formatted a card (SD-01 baseline). The camera rule comes
+    from the reference unit's internal memory (EXP-0003): blank OEM name, jump ``E9 00 00`` and
+    no boot code at all.
+    """
+    oem = sector[3:11]
+    fat32 = struct.unpack_from("<H", sector, 22)[0] == 0
+    boot = sector[90 if fat32 else 62 : 510]
+    if oem == b" " * 8 and sector[0:3] == b"\xe9\x00\x00" and not any(boot):
+        return "embedded camera formatter (matches Digimax A402 internal memory, EXP-0003)"
+    text = oem.decode("ascii", "replace")
+    for prefix, who in (
+        ("MSDOS5.0", "Windows / DOS"),
+        ("MSWIN4.", "Windows 9x"),
+        ("mkfs.fat", "Linux dosfstools"),
+        ("mkdosfs", "Linux dosfstools"),
+        ("BSD  4.4", "macOS / BSD newfs_msdos"),
+    ):
+        if text.startswith(prefix):
+            return who
+    return f"unknown (OEM name {text!r})"
+
+
 def parse_bpb(sector: bytes, offset_sector: int) -> FatInfo:
     (bps,) = struct.unpack_from("<H", sector, 11)
     spc = sector[13]
@@ -218,6 +245,9 @@ def parse_bpb(sector: bytes, offset_sector: int) -> FatInfo:
     )
     if fat32:
         info.root_cluster, info.fsinfo_sector = struct.unpack_from("<IH", sector, 44)
+    info.formatter_hint = fingerprint_formatter(sector)
+    first_data = offset_sector + reserved + nfats * fat_sectors + root_dir_sectors
+    info.data_area_aligned = first_data % spc == 0
     return info
 
 
