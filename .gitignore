@@ -1,0 +1,86 @@
+# --- Python / tooling ---
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+*.egg-info/
+build/
+dist/
+.coverage
+htmlcov/
+
+# --- NEVER COMMIT: OEM material, dumps, images, traces (keep in $DIGIMAX_PRIVATE) ---
+private/
+artifacts/
+dumps/
+*.bin
+*.img
+*.dd
+*.raw
+*.rom
+*.fw
+*.hex
+*.srec
+*.dump
+*.nand
+*.oob
+MEGA536*
+*.zip
+*.cab
+*.7z
+*.rar
+*.exe
+*.dll
+*.sys
+*.pdr
+*.inf
+*.ex_
+*.pdf
+
+# photos / media / RAW
+*.jpg
+*.JPG
+*.jpeg
+*.thm
+*.THM
+*.avi
+*.AVI
+*.wav
+*.WAV
+*.mov
+*.dng
+*.tif
+*.tiff
+
+# logic analyser / protocol traces
+*.pcap
+*.pcapng
+*.sal
+*.vcd
+*.logicdata
+
+# keys, secrets, local device details
+*.pem
+*.key
+*.p12
+*.pfx
+.env
+.env.*
+*.secret
+local-device*.json
+digimax-report*.json
+
+# Ghidra / IDA projects (contain OEM code)
+*.gpr
+*.rep/
+*.idb
+*.i64
+
+# editors / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
