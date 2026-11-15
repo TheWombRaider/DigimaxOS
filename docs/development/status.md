@@ -44,9 +44,11 @@ firmware and hardware-write review.
 
 ## Highest-value next actions
 
-1. **Firmware acquisition** ([#1](https://github.com/TheWombRaider/DigimaxOS/issues/1)): targets
-   `M4051S` / `MEGA536`, expected size up to about 3.4 MiB (215 blocks). Retry the Wayback CDX
-   prefix queries, which failed because the archive was offline on 2026-11-15.
+1. **Firmware acquisition** ([#1](https://github.com/TheWombRaider/DigimaxOS/issues/1)): the public
+   Samsung site never offered A402 firmware (F-062). `MEGA536` sat behind the dealer-portal login
+   (F-063). Remaining routes: (a) read the archived **A400 e-training pages** in a browser (the
+   archive blocks automated access from this host); (b) repair-shop and collector communities,
+   service CDs and old repair forums; (c) a donor camera's FlashROM/NAND as the ultimate source.
 2. **Recovery path** ([#4](https://github.com/TheWombRaider/DigimaxOS/issues/4)): the mass-storage
    route is ruled out for firmware. Research a boot-ROM USB mode (strap pins, "TRAP" schematic
    page) and the update-file handshake. Plan donor NAND reads.
@@ -129,4 +131,8 @@ firmware and hardware-write review.
   and firmware-driven ISP (F-059).
 - The owner asked whether the bright-light exposure test is needed now. It is not: it was deferred
   as off the critical path.
+- Wayback research: fetched the full samsungcamera.com index (S23). It has an A402 product folder and
+  driver, but no firmware anywhere on the public site (F-061, F-062). The service portal was
+  login-only; only e-training pages (including the A400's) are public (F-063). The archive then
+  blocked automated access from this host.
 

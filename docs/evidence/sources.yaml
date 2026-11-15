@@ -262,6 +262,17 @@ sources:
       block length 1-1023 bytes, 1/4-bit bus, clock 375 kHz-24 MHz, card-detect via fmgpio2 interrupt.
       Also documents NAND/SmartMedia, SPI serial flash, USB vendor commands and Bulk-Only support.
 
+  - id: S23
+    title: Wayback Machine CDX index of samsungcamera.com (19 pages) and samsungimaging.com (4 pages)
+    kind: database
+    url: http://web.archive.org/cdx/search/cdx?url=samsungcamera.com/&matchType=domain
+    retrieved: 2026-11-15
+    redistributable: true
+    location: private workspace refs/wayback/ (local copy of the index pages for offline search)
+    notes: >-
+      Filtered CDX queries failed with HTTP 503, so the full index was paged and searched locally. The
+      archive later flagged this host as a bot and blocked page fetches, so pause before retrying.
+
   - id: O1
     title: Reference unit observation - USB enumeration (EXP-0001)
     kind: observation
