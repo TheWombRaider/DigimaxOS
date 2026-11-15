@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "digimax"
+version = "0.1.0.dev0"
+description = "Read-only research and host tooling for vintage Samsung Digimax cameras (DigimaxOS)"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+authors = [{ name = "DigimaxOS contributors" }]
+classifiers = [
+  "Development Status :: 2 - Pre-Alpha",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: POSIX :: Linux",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Graphics :: Capture :: Digital Camera",
+  "Topic :: System :: Hardware",
+]
+# The host tool deliberately has ZERO runtime dependencies (stdlib only) so it is
+# easy to audit and safe to run next to private firmware material.
+dependencies = []
+
+[project.scripts]
+digimax = "digimax.cli:main"
+
+[dependency-groups]
+dev = [
+  "pytest>=8.0",
+  "hypothesis>=6.100",
+  "ruff>=0.6",
+  "mypy>=1.10",
+  "pyyaml>=6.0",
+  "types-PyYAML>=6.0",
+]
+
+[tool.setuptools]
+package-dir = { "digimax" = "tools/digimax", "digimax.sd" = "tools/digimax/sd", "digimax_sim" = "sim/digimax_sim" }
+packages = ["digimax", "digimax.sd", "digimax_sim"]
+
+[tool.setuptools.package-data]
+digimax = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+  "hardware: requires a physically connected, explicitly labelled device (never runs in CI)",
+  "slow: long-running property tests",
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "SIM", "RUF"]
+ignore = ["S101"]  # asserts are fine in tests
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S", "B011"]
+"scripts/**" = ["S603", "S607"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+files = ["tools/digimax", "sim/digimax_sim"]
