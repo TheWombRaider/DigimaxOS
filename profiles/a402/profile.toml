@@ -38,7 +38,8 @@ status = "unknown"
 candidates = ["Sunplus SPCA536 (service manual schematic section title, S3 p.52)",
               "Sunplus SPCA535 (service manual block diagram label, S3 p.50)"]
 isa = "unknown"
-notes = "Related SPCA533A is documented as having an 8032 core (S12); NOT assumed for this unit."
+isa_leads = "MIPS R3000-compatible per secondary sources (S18, S21) + KSEG1-style 0xAC05xxxx pointers in NAND metadata (EXP-0005); moderate, not determined"
+notes = "Related SPCA533A is documented as having an 8032 core (S12); NOT assumed for this unit. ADR required before any target code (ADR 0004)."
 
 [memory]
 status = "documented"

@@ -18,6 +18,12 @@ file has been obtained (F-030, F-032). The camera's own `NAND RSV` table shows t
 leading candidate for the firmware (F-046, F-047). **USB mass storage cannot back up the firmware
 region**, so recovery needs another path (#4). **Nothing has been written to the camera.**
 
+**Desk research (2026-11-15):** the SPCA536 is reported as MIPS R3000-compatible (F-055), which fits
+the KSEG1-style pointers found on the unit. The sibling SPCA533A datasheet (S22) shows a
+firmware-driven native SD command engine, which suggests SDHC is a firmware-only change (H-015).
+It also shows external-FlashROM boot with IO-trap straps (H-016, a donor-FlashROM recovery
+candidate), and that its ISP is firmware-driven, not a ROM rescue (F-059).
+
 **Storage facts:** a single USB LUN, either the card or internal memory (F-026). Internal memory is
 785 × 16 KiB blocks of FAT12, laid out by the camera's own formatter (F-027, F-028), and reads back
 byte-identically (F-050). A private, hashed image exists in the workspace (EXP-0005).
@@ -117,4 +123,10 @@ firmware and hardware-write review.
   (`EB 00 90`, unaligned), unlike the camera's internal format. 4/18 card photos have EXIF rotation
   written elsewhere. Across 44 shots, AE always used F3.5 and ISO 200. `card check` fingerprints this
   second formatter.
+- Desk research: SPCA536 reported as MIPS R3000 (S18). A Sunplus ISP tool exists for SPCA533/536/538
+  (S19, not downloaded). "RSV" is Sunplus's term for the reserved region (S20). The SPCA533A datasheet
+  (S22, private) gives the SD command-engine model (H-015), external FlashROM + IO-trap boot (H-016)
+  and firmware-driven ISP (F-059).
+- The owner asked whether the bright-light exposure test is needed now. It is not: it was deferred
+  as off the critical path.
 

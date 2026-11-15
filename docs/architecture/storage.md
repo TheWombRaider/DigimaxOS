@@ -44,6 +44,15 @@ then CMD2 ─► CMD3 (RCA) ─► CMD9 (CSD) ─► CMD7 (select) ─► [CMD16
 An SDHC card stays **busy forever** if the host omits CMD8 or HCS. That is what `HostPolicy.legacy()`
 models, and it is the leading hypothesis for stock behaviour (H-002).
 
+## What the sibling SPCA533A tells us (S22, F-058)
+
+The SPCA533A's SD block is a *command engine*. Firmware writes the command index and a full 32-bit
+argument into a command buffer, the hardware adds CRC7/CRC16, and responses, data, block length
+(1–1023), bus width (1/4) and clock (375 kHz–24 MHz) are all under software control. If the
+SPCA536 is the same (H-015), then everything in layers 2–7 above is firmware. The CMD8/HCS
+handshake, CCS-aware addressing, CSD v2 parsing and FAT32 can all be added without hardware
+changes, which makes the `digimax.sd.host` reference model directly portable in design.
+
 ## Open questions (tracked as issues)
 
 - Does the SPCA536 have a native SD controller, or does the firmware bit-bang SPI? Find the

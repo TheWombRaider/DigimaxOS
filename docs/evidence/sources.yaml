@@ -201,6 +201,67 @@ sources:
       A search engine summarised this photo's EXIF as Software M4051S-0520, but the fetched page
       showed no Software field. UNVERIFIED; needs a direct EXIF read of the original file.
 
+  - id: S18
+    title: pyra-handheld forum thread "Mn860" (2006) - SPCA536 described as MIPS R3000-compatible
+    kind: article
+    url: https://pyra-handheld.com/boards/threads/mn860.31595/
+    retrieved: 2026-11-15
+    redistributable: false
+    notes: >-
+      Post #13 (2006-11-22) quotes an unnamed web source: "SPCA536 program MIPS RISC MCU
+      R3000-compatible", with ROM/Flash/SDRAM, TFT/STN LCD, USB, CCD/CMOS, CF/IDE-like storage
+      interfaces and "RS232 for program upgrade & debugging". Secondary, unsourced claim. The device
+      discussed (MP4 player) uses an SPCA536A-HB111.
+
+  - id: S19
+    title: CodeBus listing - "isp_tool_v5.2.2" Sunplus firmware update tool (spca533/536/538)
+    kind: oem-download
+    url: https://www.codebus.net/1221216.html
+    retrieved: 2026-11-15
+    redistributable: false
+    notes: >-
+      Listing only; NOT downloaded (untrusted Windows executable). File list: ISP_V5.2.2.exe,
+      USBISP.BIN, Isp.ini, ispmask-nand.bin, ispmask-rom.bin, ispnormal-nand.bin, ispnormal-rom.bin,
+      isp_nand_538*.bin, isp_rom_538*.bin; 484 KB; dated 2012-11-26. Evidence that a USB in-system
+      programming (ISP) mechanism exists for this chip family, in NAND- and ROM-boot variants.
+
+  - id: S20
+    title: John Willis - "Czur, the SUNPLUS Burn file format" (2017)
+    kind: article
+    url: https://www.johnwillis.com/2017/03/czur-sunplus-file-format.html
+    retrieved: 2026-11-15
+    redistributable: false
+    notes: >-
+      About the much later iCatch/Sunplus SPCA6330 (not the SPCA536): SPHOST.BRN burn files, "Card
+      ISP" files, and an FRM tool that "can back up firmware from devices in RSV mode". This shows
+      that "RSV" is Sunplus terminology for the reserved/firmware resource area, matching F-046.
+
+  - id: S21
+    title: nedopc.org forum - MP3/MP4 player with SPCA536A-HB111 (reportedly R3000 core)
+    kind: article
+    url: http://www.nedopc.org/forum/viewtopic.php?t=8603
+    retrieved: 2026-11-15
+    redistributable: false
+    notes: Unreachable on 2026-11-15 (connection refused); summarised only by a search engine as "based on the R3000 core". Unverified.
+
+  - id: S22
+    title: Sunplus SPCA533A Digital Still Camera Controller - Preliminary User Guide v0.2.0 (2001-06-14)
+    kind: datasheet
+    url: https://barkonarova.weebly.com/uploads/4/6/0/1/46015351/spca-533a.pdf
+    retrieved: 2026-11-15
+    sha256: 52e29722a666a08e18077472c96ed657cd769f05b92bee301d8dc98e181a2b7b
+    redistributable: false
+    location: private workspace refs/datasheets/ (not in Git; marked "Proprietary & Confidential")
+    notes: >-
+      Predecessor/sibling of the SPCA536, NOT the A402's chip. Embedded 8032 with 1 MB bank-switched
+      external parallel ROM (sec. 1.13.3). ISP = firmware shadows a <=4 KB routine into SRAM and
+      rewrites the external flash ROM from data sent over USB bulk (1.13.4), so it depends on working
+      firmware. IO-trap values are latched from the SDRAM MA pins during the 10 ms power-on reset
+      (1.2.2); IOTRAP[0] selects an external CPU/ICE. Native SD controller (1.5.6): firmware-built
+      commands via command buffer 0x245B-0x245F, response buffer 0x2460-0x2465, hardware CRC7/CRC16,
+      block length 1-1023 bytes, 1/4-bit bus, clock 375 kHz-24 MHz, card-detect via fmgpio2 interrupt.
+      Also documents NAND/SmartMedia, SPI serial flash, USB vendor commands and Bulk-Only support.
+
   - id: O1
     title: Reference unit observation - USB enumeration (EXP-0001)
     kind: observation

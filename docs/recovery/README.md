@@ -22,6 +22,17 @@ version-string change. It must not touch the shutter, the SD driver or the bootl
 
 ## Readback options under investigation (non-invasive first)
 
+0. **Sunplus USB ISP mode** (F-056, H-014). A 2012 Sunplus ISP tool for the SPCA533/536/538 ships
+   `USBISP.BIN` and NAND/ROM ISP images, so this chip family can be programmed over USB. It is the
+   leading candidate for R4. Its entry method and whether it can *read* NAND/RSV are unknown.
+   **Never** try it on the reference unit before G2. Research it offline, then test on a donor.
+   Caution (F-059): on the sibling SPCA533A, ISP is *firmware-driven*, so it would not count as an
+   independent path unless the SPCA536 also has a ROM-resident ISP.
+0b. **External FlashROM on a donor** (H-016, F-060). If the A402 boots from a parallel NOR
+   FlashROM, as the schematic section names and the SPCA533A design suggest, a donor's chip can be
+   read and rewritten out of circuit with a standard programmer. That works without any working
+   firmware, so it is a true R4 candidate. Prerequisite: the part number from schematic p.55 (#13).
+
 1. **Supported USB paths.** What do mass storage (observed), PictBridge/PTP (untested) and the
    internal-memory LUN (no card inserted) expose? Mass-storage access to internal flash would show
    the user filesystem area, not the firmware.
