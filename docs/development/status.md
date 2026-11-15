@@ -69,12 +69,12 @@ firmware and hardware-write review.
 | Night-mode menu walk-through | someone physically at the camera |
 | SD capacity tests | expendable cards (purchase decision is the owner's) |
 | Donor camera for recovery work | purchase decision is the owner's |
-| Durable SSH access to the Windows host | the owner authorising an SSH key, instead of sharing a password per session |
 | Avoiding Windows host writes (System Volume Information) | optional: owner enables a read-only removable-storage policy on the Windows host |
 
 ## Environment facts
 
-- Dev host: Ubuntu 24.04 VM. The camera is on a separate Windows 11 laptop, reached over SSH.
+- Dev host: Ubuntu 24.04 VM. The camera is on a separate Windows 11 laptop, reached over SSH with a
+  dedicated key restricted to the dev VM's address (set up 2026-11-15; no password needed or stored).
   Read-only PowerShell is collected with `scripts/windows/Get-DigimaxInfo.ps1`.
 - Private workspace: `~/.local/share/digimaxos-private` (OEM driver package S10, EXP-0001 raw
   report, reference copies of `sunplus.c` and `usb.ids`, all hashed in `SHA256SUMS`).
@@ -135,4 +135,7 @@ firmware and hardware-write review.
   driver, but no firmware anywhere on the public site (F-061, F-062). The service portal was
   login-only; only e-training pages (including the A400's) are public (F-063). The archive then
   blocked automated access from this host.
+- At the owner's request, set up key-based SSH from the dev VM to the Windows host (dedicated ed25519
+  key, `from=` restricted, appended alongside the owner's existing keys). The password-based helpers
+  were deleted.
 

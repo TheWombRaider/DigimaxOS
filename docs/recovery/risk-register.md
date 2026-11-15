@@ -16,4 +16,4 @@ Severity and likelihood are rated 1 (low) to 3 (high).
 | R-10 | The SoC turns out to be undocumented or its ISA unidentifiable, which stalls firmware work | 2 | 2 | Deliver host tooling regardless; seek datasheets and donor boards; revise scope publicly | maintainers |
 | R-11 | Immutable ROM or fixed-function hardware makes SDHC impossible | 2 | 1 | Publish the evidence; reduce scope to the largest reliable SDSC capacity; optional donor hardware research | maintainers |
 | R-12 | Vendor USB requests change camera state | 3 | 1 | No vendor or control requests in tooling; observation only, through standard class drivers | maintainers |
-| R-13 | Credentials shared during agent sessions are persisted | 2 | 1 | Agents never store credentials; prefer SSH keys authorised by the owner | maintainers |
+| R-13 | Credentials shared during agent sessions are persisted | 2 | 1 | Agents never store credentials. Since 2026-11-15 the reference host uses a dedicated, address-restricted SSH key, so no password is needed | maintainers |
