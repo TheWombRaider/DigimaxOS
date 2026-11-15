@@ -23,3 +23,7 @@ ship, will be versioned separately and scoped to exact base-firmware hashes.
   cluster alignment; FAT12 fixtures matching the A402 internal-memory layout.
 - EXP-0002/EXP-0003: internal-memory LUN geometry, firmware version `M4051S-0525`.
 - Exposure model: per-value shutter status; stock Night-mode values marked `observed` (EXP-0004).
+- `digimax exif`: privacy-preserving EXIF reader (stdlib) with `--summary` aggregation.
+
+### Fixed
+- Camera formatter fingerprint: the OEM name is eight NUL bytes, not spaces (EXP-0005).

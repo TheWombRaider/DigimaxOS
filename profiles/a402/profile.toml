@@ -62,8 +62,18 @@ lun_sectors = 25120          # 12,861,440 bytes exposed of the documented 16 MB 
 hidden_bytes_estimate = 3915776  # 16 MiB - exposed; presumably firmware/reserved/spare (H-010)
 partition = { type = 0x01, start = 57, sectors = 25063, bootable = true }
 filesystem = "FAT12, 32 sectors/cluster (16 KiB), 2 FATs x 3 sectors, 512 root entries, 782 clusters"
-formatter = "camera (blank OEM name, jump E9 00 00, no boot code); data area aligned to cluster (LBA 96)"
-pre_partition_gap = "sectors 1-56 are not all zero; contents not examined (H-011)"
+formatter = "camera (OEM name = 8 NUL bytes, jump E9 00 00, no boot code); data area aligned to cluster (LBA 96)"
+pre_partition_gap = "LBA 8/16/40/48 reserved-block list, 24-31/56 32-bit 0xAC05xxxx table, 32 'NAND RSV' header (EXP-0005)"
+oem_name = "eight NUL bytes"
+
+[nand]
+status = "inferred"
+experiment = "EXP-0005"
+blocks = 1024
+block_bytes = 16384
+reserved_blocks = { first = 809, last = 1023, count = 215 }   # from the NAND RSV header and table
+user_lun_blocks = 785
+part_number = "unknown"
 
 [firmware]
 status = "verified"
@@ -93,5 +103,8 @@ aperture_mechanism = "unknown (iris vs ND/aperture plate not established)"
 shutter_range_s = { normal = [2.0, 0.001], night = [8.0, 0.001] }
 shutter_steps = "unknown - manuals give range only"
 night_mode_shutter_menu = { status = "observed", experiment = "EXP-0004", values = ["AUTO", "1/8", "1/2", "1", "2", "3", "4", "6", "8"], unconfirmed = ["1/4"] }
+night_mode_controls = { status = "observed", experiment = "EXP-0004", aperture = ["AUTO", "F3.5", "F7"], iso = "not adjustable", flash = "adjustable", self_timer = "adjustable" }
 ev_compensation = { range = 2.0, step = 0.5 }
+program_ae_observed = { experiment = "EXP-0006", n = 26, f_number = [3.5], iso = [200], shutter = "continuously variable (e.g. 1000/18467 s)", metering = "centre-weighted (2)" }
+user_adjustable_modes = ["night"]  # EXP-0004: no other mode exposes exposure settings
 focus = "fixed focus, two-step mechanical switch (macro 0.2 m / normal 1.0 m-inf)"

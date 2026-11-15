@@ -69,6 +69,7 @@ uv run digimax inspect        # A402 profile with the verification status of eve
 | `digimax card make-pattern` / `verify-pattern` | Address-unique sector patterns that detect wrap-around and aliasing (SD-02 acceptance method) |
 | `digimax sd csd HEX` / `sd ocr HEX` | Decode SD registers: capacity class, addressing mode, warnings |
 | `digimax sd address` / `sd frame` / `sd crc16` | Range-checked LBA→command argument conversion, CRC7 command frames, CRC16 |
+| `digimax exif FILE… [--summary]` | Identity and exposure EXIF tags only (never dates, GPS or owner fields) |
 | `digimax exposure table` | The documented A402 exposure space with EV values and status |
 | `digimax exposure mock KEYS…` | Drives the proposed M-mode UI state machine and prints an ASCII screen |
 | `digimax patch plan/build`, `digimax capture` | Present but **unsupported** (exit code 3): they explain which gate blocks them |
@@ -86,7 +87,11 @@ The full register is in [docs/evidence/findings.md](docs/evidence/findings.md). 
 - The reference unit runs firmware **`M4051S-0525`** (from its EXIF `Software` tag,
   [EXP-0003](docs/evidence/experiments/EXP-0003-firmware-version-and-boot-sectors.md)). With no card
   inserted, the camera shows its internal memory: 25,120 sectors of FAT12. About 3.7 MiB of the
-  16 MB NAND stays hidden from USB and probably holds the firmware.
+  16 MB NAND stays hidden from USB. The camera's own `NAND RSV` table marks blocks 809–1023 as
+  reserved, the likely firmware area ([EXP-0005](docs/evidence/experiments/EXP-0005-internal-lun-image-and-nand-reserve.md)).
+- Stock manual control exists only in Night mode: shutter AUTO and 1/8–8 s, aperture AUTO/F3.5/F7, no
+  ISO. Yet auto-exposure sets **continuously variable** shutter times, a good sign for a real M mode
+  ([EXP-0006](docs/evidence/experiments/EXP-0006-program-ae-exif-statistics.md)).
 - The official Samsung driver package says the A402 and the **Kenox D402** are the same product
   family.
 - The service manual names **Sunplus SPCA536** in its schematic section titles but **SPCA535** in its block

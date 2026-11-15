@@ -10,3 +10,5 @@ serial numbers, no owner EXIF fields and no OEM bytes. Each result links to its 
 | 2026-11-15 | [EXP-0002](../evidence/experiments/EXP-0002-internal-memory-lun.md) | With no card, the internal memory is the only LUN: 25,120 sectors, FAT12 at LBA 57; about 3.7 MiB of NAND hidden |
 | 2026-11-15 | [EXP-0003](../evidence/experiments/EXP-0003-firmware-version-and-boot-sectors.md) | Firmware **M4051S-0525**; camera formatter fingerprint (blank OEM, `E9 00 00`, cluster-aligned data) |
 | 2026-11-15 | [EXP-0004](../evidence/experiments/EXP-0004-night-mode-shutter-menu.md) | Night-mode manual shutter: AUTO, 1/8–8 s only (1/4 unconfirmed) |
+| 2026-11-15 | [EXP-0005](../evidence/experiments/EXP-0005-internal-lun-image-and-nand-reserve.md) | Reproducible LUN readback; `NAND RSV` table: blocks 809–1023 reserved (firmware candidate) |
+| 2026-11-15 | [EXP-0006](../evidence/experiments/EXP-0006-program-ae-exif-statistics.md) | AE shutter is continuously variable; F3.5 / ISO 200 in all 26 shots |

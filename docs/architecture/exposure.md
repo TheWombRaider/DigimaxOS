@@ -13,6 +13,10 @@
   the menu values *observed* and the rest *candidate*.
 - **Implication:** M mode needs the auto-exposure shutter routine for fast speeds, not just the
   Night-mode handler. Characterise the shutter (H-012) before offering those speeds.
+- AE writes **continuously variable** exposure times such as 1000/18467 s (EXP-0006, F-048). The
+  shutter is timed in fine units, so M mode could offer third-stop (or finer) steps across the
+  verified range. Aperture is AUTO/F3.5/F7 only. ISO has no user control in stock (F-045), and AE
+  used ISO 200 in every observed shot.
 
 ## Proposal
 

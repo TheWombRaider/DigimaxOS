@@ -45,7 +45,7 @@ consistent with a 255-head × 32-sector geometry.
 | Field | Value |
 |---|---|
 | Jump | `E9 00 00` (no boot code follows; bytes 62–509 are all zero) |
-| OEM name | 8 spaces (blank) |
+| OEM name | blank. **Corrected in EXP-0005: eight NUL bytes, not spaces** |
 | Bytes/sector, sectors/cluster | 512, 32 |
 | Reserved sectors, FATs × size | 1, 2 × 3 sectors |
 | Root entries | 512 |

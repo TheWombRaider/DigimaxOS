@@ -18,10 +18,23 @@ Shutter values offered in the stock Night-mode +/- screen, as reported by the ow
 **1/4 s is unconfirmed.** The transcription of the spoken report is ambiguous between "1/8, 1/2" and
 "1/8, 1/4, 1/2". It has been put to the owner for confirmation.
 
-Not yet recorded: the aperture values (UP/DOWN), whether ISO, EV and WB can be changed in Night
-mode, and whether the settings persist across a mode change or power-cycle.
+Follow-up report from the owner (same session):
+
+| Control in Night mode | Result |
+|---|---|
+| Aperture (UP/DOWN on the +/- screen) | **AUTO, F3.5, F7** |
+| ISO | **cannot be changed**. The owner doubts it can be changed in any mode, although S1 documents Auto/100/200/400 (presumably in Program mode; to be checked) |
+| Flash mode | can be changed |
+| Self-timer | can be changed |
+| EV compensation, white balance | not reported as available |
+| Other modes | the owner found **no mode other than Night** where exposure settings can be changed |
+| Persistence across a mode change or power-cycle | not yet tested |
 
 ## Interpretation
+
+- **Observed (F-045):** in Night mode the user controls only shutter (AUTO, 1/8 to 8 s) and aperture
+  (F3.5 / F7), plus flash and self-timer. ISO cannot be set there, so the Night-mode capture runs
+  at an ISO the camera chooses. That ISO will be visible in the EXIF of Night-mode captures.
 
 - **Observed (F-044):** stock manual shutter control is limited to **slow speeds (8 s to 1/8 s)**
   plus AUTO. The documented 1/1000 s fastest speed (S1) is presumably reached only by
