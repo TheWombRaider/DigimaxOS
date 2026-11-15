@@ -1,0 +1,60 @@
+# Findings register
+
+Each finding has an ID, a confidence level and its evidence. Do not delete entries. Mark them
+**superseded** and link to the replacement.
+
+| Confidence | Meaning |
+|---|---|
+| **verified** | Observed on the reference unit; experiment ID given |
+| **documented** | Stated by an OEM or standards document; not yet observed |
+| **inferred** | Follows from verified or documented facts by reasoning stated here |
+| **contradicted** | Sources disagree; resolution pending |
+
+## Device identity
+
+| ID | Finding | Confidence | Evidence |
+|---|---|---|---|
+| F-001 | The reference unit enumerates as USB `0839:003C`, bcdDevice `0x0100`, single interface class 08/06/50 (Mass Storage, SCSI transparent, Bulk-Only Transport). Windows binds the in-box `USBSTOR` driver; no vendor driver is needed on modern hosts. | verified | EXP-0001 |
+| F-002 | SCSI INQUIRY identity is vendor `SAMSUNG`, product `DIGITAL CAMERA`, revision `1.00`. The USB-reported device description is `DIGITAL CAMERA` padded with spaces. No USB serial number is reported (the host synthesises an instance ID). | verified | EXP-0001 |
+| F-003 | The same VID:PID appears in Samsung's 2004–2005 Windows 98 driver INF ("Samsung Digital Camera", Samsung Techwin). | documented | S10 |
+| F-004 | Product `003C` is not in the public `usb.ids` database. Vendor `0839` is Samsung Techwin. | documented | S11 |
+| F-005 | The A402 and Kenox D402 share one driver package; Setup.ini names both. Kenox was Samsung's Korean-market brand, so D402 is very likely the same hardware, but this is not yet confirmed at board level. | documented / inferred | S10 |
+| F-006 | No Samsung Techwin device appears in the Linux `gspca` Sunplus webcam driver. The A402 has not been shown to offer a webcam/streaming mode. | documented | S6 |
+
+## SoC and memory
+
+| ID | Finding | Confidence | Evidence |
+|---|---|---|---|
+| F-010 | The service manual's schematic section title names **SPCA536** ("2) SPCA536 DSP"), while its block diagram text shows **SPCA535**. The update file is labelled `MEGA536`. | contradicted | S3 |
+| F-011 | The block diagram lists 256 Mbit SDRAM, 16 MB NAND, a 93C66 EEPROM labelled "SYSTEM", and 27 MHz and 32.768 kHz crystals. | documented | S3 |
+| F-012 | One schematic section is titled "FlashROM-NandFlash-SD". This *suggests* a separate boot ROM or NOR flash besides the NAND, but the schematic image has not been transcribed. | documented (title only) | S3 |
+| F-013 | The CPU core of the SPCA536 is **unknown**. Sunplus's own SPCA536 press material names no core. A related SPCA533A is reported to contain an 8032 (an 8051 variant), and an unrelated Sunplus camera's firmware disassembled plausibly as 8051. Neither fact transfers to the SPCA536 without evidence. | unknown | S12, S13 |
+| F-014 | The SPCA536 was announced 2003-12-15 as a 16 MP DSC controller with JPEG and MPEG-4 codecs and a customer development environment. | documented | S13 |
+
+## Storage
+
+| ID | Finding | Confidence | Evidence |
+|---|---|---|---|
+| F-020 | With the owner's card inserted, the camera exposes **one** LUN: a 985,088-sector (504,365,056-byte) disk with 512-byte logical sectors. It does not expose internal flash as a second LUN while a card is present. | verified | EXP-0001 |
+| F-021 | That card is partitioned MBR with one primary partition at LBA 32, 984,832 sectors, type `0x06` (FAT16 ≥ 32 MB, CHS-addressed), formatted FAT with 16 KiB clusters (30,767 clusters ⇒ FAT16 by cluster count). 224 sectors at the end of the disk are unpartitioned. | verified | EXP-0001 |
+| F-022 | That layout (partition at sector 32, FAT16, 32 sectors per cluster) matches the SD Association's recommended format for 257–512 MB cards. *Who* formatted it (camera, PC, factory) is unknown until the boot sector's OEM name is read, which needs owner approval. | inferred | EXP-0001, S4 |
+| F-023 | The card holds a DCF tree `DCIM\100SSCAM`. The firmware's DCF folder suffix is therefore probably `SSCAM`. This is to be confirmed by observing a folder the camera creates itself. | verified (presence) / inferred (creator) | EXP-0001 |
+| F-024 | The manual guarantees cards only up to 512 MB. Larger SDSC cards have not been tested. The 512 MB figure is a guarantee, not a proven limit. | documented | S1 |
+| F-025 | Windows created a `System Volume Information` folder on the owner's card when it was mounted read-write. Future sessions should avoid further host writes (eject safely; prefer read-only imaging). | verified | EXP-0001 |
+
+## Firmware acquisition
+
+| ID | Finding | Confidence | Evidence |
+|---|---|---|---|
+| F-030 | The official Samsung support page for the A402 offers **no firmware**, only a 2008-dated USB driver and the manual. | documented | S9 |
+| F-031 | The service manual's upgrade procedure: download "MEGA536" from the Samsung service site, format the card in the camera, copy the file onto the camera's removable disk over USB (not a card reader), then check the file name. No extension, folder or key combination is given. That the file must be copied *through the camera* (not with a reader) is notable. Why is unknown. | documented | S3 |
+| F-032 | A public web search (2026-11-14) found no copy of `MEGA536` or any A402/D402 firmware file. The driver package contains no firmware. | negative result | S9, S10, searches recorded in the 2026-11-14 entry of docs/development/status.md |
+
+## Exposure
+
+| ID | Finding | Confidence | Evidence |
+|---|---|---|---|
+| F-040 | Documented exposure space: shutter 2–1/1000 s (8–1/1000 s in Night mode), F3.5 and F7.0, ISO Auto/100/200/400, EV ±2 in 0.5 steps, multi/spot metering. | documented | S1 |
+| F-041 | Night mode lets the user choose shutter (LEFT/RIGHT) and aperture (UP/DOWN) from a +/- screen. The individual shutter steps are **not documented** in the text we have. | documented | S2 |
+| F-042 | The lens is fixed focus with a two-position mechanical switch. There is no focus motor to control. | documented | S1 |
+| F-043 | The block diagram includes a motor driver (Sanyo LB1846M). On a fixed-focus, fixed-focal-length camera this probably drives the shutter and/or the aperture/ND mechanism, so "F7" may be an aperture plate or ND rather than an iris. This is a hypothesis (H-004). | inferred | S3 |

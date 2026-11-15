@@ -1,0 +1,190 @@
+# DigimaxOS source registry.
+#
+# Every factual claim in the docs cites one of these IDs. Manuals and OEM files are
+# *linked references*, never project assets: `redistributable` records whether we may copy
+# them (almost always false/unknown). Private copies, where they exist, live only in the
+# maintainer's private workspace and are identified here by hash.
+#
+# kind: manual | service-manual | oem-download | datasheet | standard | source-code |
+#       database | article | product-page | observation
+# Schema is checked by tests/test_cli_and_repo.py::test_sources_registry_schema.
+
+sources:
+  - id: S1
+    title: Samsung Digimax A402 user manual
+    kind: manual
+    url: https://www.manualslib.com/manual/145735/Samsung-Digimax-A402.html
+    retrieved: 2026-11-14
+    pages: "web pp. 30-33 (shooting modes, Night mode, +/- control), 36, 85-86 (specifications)"
+    redistributable: false
+    notes: >-
+      Specifications (printed p.85): 1/2.5" CCD 4.0 MP effective; 5.8 mm lens F3.5-F7.0; shutter
+      2-1/1000 s, Night mode 8-1/1000 s; ISO Auto/100/200/400; EV +/-2.0 in 0.5 steps; 16 MB
+      internal flash; SD/MMC "up to 512 MB guaranteed"; JPEG (DCF, EXIF 2.2), AVI (MJPEG)
+      640x480/320x240 at 24/15 fps, WAV. Fixed focus with two-step manual switch.
+
+  - id: S2
+    title: Night scene shutter/aperture controls (user manual pages)
+    kind: manual
+    url: https://www.manualslib.com/manual/145735/Samsung-Digimax-A402.html?page=33
+    retrieved: 2026-11-14
+    redistributable: false
+    notes: >-
+      Night mode: +/- opens a setting screen; LEFT/RIGHT change shutter speed, UP/DOWN change
+      aperture; +/- again saves. The text-extracted pages give no list of selectable shutter steps.
+      Mirror: https://manualsdump.com/en/manuals/samsung-digimax_a402/205766/32
+
+  - id: S3
+    title: Samsung Digimax A402 service manual
+    kind: service-manual
+    url: https://www.manualslib.com/manual/4252216/Samsung-Digimax-A402.html
+    retrieved: 2026-11-14
+    pages: >-
+      web p.32 (printed 34) firmware upgrade; web p.34 (printed 36) test mode / adjustment;
+      web p.50 block diagram; web p.52 (printed 54) "SPCA536 DSP" schematic; web p.54 (printed 56)
+      "SDRAM_TRAP_EEPROM"; web p.55 (printed 57) "FlashROM-NandFlash-SD"
+    redistributable: false
+    notes: >-
+      Schematic pages are images; their net names have NOT been transcribed yet (see issue on
+      schematic transcription). Upgrade: download "MEGA536" from the Samsung service site, copy it
+      to the camera's removable disk over USB ("Do not use card Reader"), card formatted in-camera
+      first; no extension or target folder stated. Test mode entry: remove card, hold OK while
+      pressing POWER ~2 s, beep, press RIGHT. The adjustment table lists FIRMWARE UP, PUNT, MSCALIB,
+      BATTERY, BAD PIXEL. Block diagram labels: Sunplus DSP with USB1.1, "SPCA535" (layout
+      ambiguous), Panasonic MN39482 CCD, NN12030 (AFE?), RichTek RT9590 strobe charger, Sanyo LB1846M
+      motor driver, Maxim MAX1567 power, Casio COM18T1824 1.8" TFT, 256 Mbit SDRAM, 16 MB NAND,
+      93C66 EEPROM ("SYSTEM"), 27 MHz main and 32.768 kHz RTC crystals.
+
+  - id: S4
+    title: SD Association - SD/SDHC/SDXC/SDUC capacity overview
+    kind: standard
+    url: https://www.sdcard.org/developers/sd-standard-overview/capacity-sd-sdhc-sdxc-sduc/
+    retrieved: 2026-11-14
+    redistributable: false
+    notes: SDSC <= 2 GB (FAT12/16), SDHC > 2 GB to 32 GB (FAT32), SDXC > 32 GB to 2 TB (exFAT).
+
+  - id: S5
+    title: SD Physical Layer Simplified Specification
+    kind: standard
+    url: https://www.sdcard.org/cms/wp-content/themes/sdcard-org/dl.php?f=Part1_Physical_Layer_Simplified_Specification_Ver7.10.pdf
+    retrieved: 2026-11-14
+    version: "7.10"
+    redistributable: false
+    notes: >-
+      Basis for tools/digimax/sd: CMD8/ACMD41 HCS/CCS negotiation, OCR and CSD v1/v2/v3 layout,
+      byte vs block addressing, CRC7/CRC16 (including the 512 x 0xFF -> 0x7FA1 example).
+
+  - id: S6
+    title: Linux kernel gspca Sunplus driver (sunplus.c)
+    kind: source-code
+    url: https://github.com/torvalds/linux/blob/master/drivers/media/usb/gspca/sunplus.c
+    retrieved: 2026-11-14
+    license: GPL-2.0-or-later
+    redistributable: true
+    notes: >-
+      Webcam-mode driver for SPCA504/504B/504C/533/536 bridges. SPCA536 entries exist for other
+      vendors (e.g. 04fc:5360, 055f:c211, 0733:3261); no Samsung Techwin (0839) device is listed.
+      GPL: reference only, never copied into MIT code.
+
+  - id: S7
+    title: spca-fun (SPCA6350 research)
+    kind: source-code
+    url: https://github.com/mheistermann/spca-fun
+    retrieved: 2026-11-14
+    license: AGPL-3.0
+    redistributable: true
+    notes: Different, much newer SoC (SPCA6350, EKEN H9). Methodology inspiration only.
+
+  - id: S8
+    title: CHDK wiki
+    kind: article
+    url: https://chdk.fandom.com/wiki/CHDK
+    retrieved: 2026-11-14
+    license: "CHDK code is GPL; wiki CC-BY-SA"
+    redistributable: unknown
+    notes: Concept reference for RAM-resident enhancement loaders. Different platform (Canon DIGIC).
+
+  - id: S9
+    title: Samsung UK support page - DIGIMAX A402 (EC-A402ZSBA/E1)
+    kind: product-page
+    url: https://www.samsung.com/uk/support/model/EC-A402ZSBA/E1/
+    retrieved: 2026-11-14
+    redistributable: false
+    notes: >-
+      Lists exactly two downloads: USB driver 20080216103900687_A402_D402.zip (v1.0, 2008-02-16,
+      0.88 MB, Win 98) and English user manual (2008-03-03). NO firmware is offered.
+
+  - id: S10
+    title: Samsung A402/D402 USB driver package (Windows 98)
+    kind: oem-download
+    url: https://org.downloadcenter.samsung.com/downloadfile/ContentsFile.aspx?CDSite=UNI_UK&OriginYN=N&ModelType=N&ModelName=DIGIMAX+A402&CttFileID=1848962&CDCttType=DR&VPath=DR%2F200802%2F20080216103900687_A402_D402.zip
+    retrieved: 2026-11-14
+    sha256: 7f865bedb1bd6f84a0541525275cea1e8944585e52ae30cd7a8c7c02d7e08ce4
+    redistributable: false
+    location: private workspace oem/samsung-driver-2008/ (not in Git)
+    notes: >-
+      Inspected without executing anything. A402.inf: provider/manufacturer "Samsung Techwin",
+      hardware ID USB\VID_0839&PID_003C "Samsung Digital Camera", USB mass-storage port driver
+      (A402.SYS, A402.pdr), sections for CBI, CB and Bulk-Only protocols. Setup.ini AppName:
+      "Digimax A402, KENOX D402". File dates 2004-12-07 (driver) to 2005-01-25 (installer). Contains
+      no firmware.
+
+  - id: S11
+    title: Linux USB ID repository (usb.ids)
+    kind: database
+    url: http://www.linux-usb.org/usb.ids
+    retrieved: 2026-11-14
+    redistributable: true
+    notes: >-
+      Vendor 0839 = "Samsung Techwin Co., Ltd". Lists Digimax 210SE/220/230/300/340/360/410/V4/S500/
+      D830/50 Duo/35 MP3 and others; product 003c is NOT listed (candidate upstream submission).
+
+  - id: S12
+    title: Gumpack camera teardown (SPCA1527A/SPCA533A discussion)
+    kind: article
+    url: https://www.pluc.fr/2010/02/tear-down-and-hacking-around-gumpack-camera/comment-page-1/
+    retrieved: 2026-11-14
+    redistributable: false
+    notes: >-
+      Different Sunplus camera. SPI flash dumped off-board; 8051 disassembly gave plausible code,
+      ARM/MIPS/AVR did not; firmware copied flash->RAM at boot; no checksum found on its modified
+      image; strings ISP.BIN, FW.BIN, ISPKEY.TXT, DRAMPARA.TXT. Readers cite an SPCA533A datasheet
+      describing an on-chip 8032. Methodology hint only - not evidence about the A402.
+
+  - id: S13
+    title: Sunplus press release - SPCA536 16 MP DSC controller with MPEG-4
+    kind: product-page
+    url: https://w3.sunplus.com/press/press.asp?id=566411B3D3B16
+    retrieved: 2026-11-14
+    date: 2003-12-15
+    redistributable: false
+    notes: >-
+      "16 Mega-pixel DSC Controller SoC with MPEG-4 DV Function", JPEG and MPEG-4 codecs, "complete
+      development environment for customers". No CPU core named.
+
+  - id: S14
+    title: SPCA536A datasheet listings (aggregators)
+    kind: datasheet
+    url: https://datasheet4u.com/datasheets/Sunplus/SPCA536A/842766
+    retrieved: 2026-11-14
+    redistributable: unknown
+    notes: >-
+      "Advanced Imaging Controller"; 44-page PDF also listed at elektrotanya.com
+      (sunplus_spca_536a_datasheet.pdf). Fetch blocked (HTTP 403) during first session; content
+      unverified. Distributor listing (veswin.com) gives SPCA536A-PB111 in BGA-288.
+
+  - id: S15
+    title: Samsung camera firmware upgrade via i-Launcher (later models)
+    kind: product-page
+    url: https://www.samsung.com/lb/support/cameras/how-to-do-the-firmware-upgrade-guide-using-i-launcher-on-samsung-digital-camera/
+    retrieved: 2026-11-14
+    redistributable: false
+    notes: Later Samsung compacts updated via i-Launcher or firmware copied to SD; context only.
+
+  - id: O1
+    title: Reference unit observation - USB enumeration (EXP-0001)
+    kind: observation
+    location: docs/evidence/experiments/EXP-0001-usb-enumeration.md
+    retrieved: 2026-11-14
+    redistributable: true
+    notes: Sanitized; raw report kept in the private workspace.

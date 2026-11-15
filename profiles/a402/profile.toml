@@ -1,0 +1,73 @@
+# DigimaxOS device profile: Samsung Digimax A402 (alias Kenox D402)
+#
+# Every field carries a status:
+#   verified   - observed on the reference unit, with an experiment ID
+#   documented - stated by an OEM document (source ID), not yet observed
+#   unknown    - not established; tools must not rely on it
+#
+# Tools MUST refuse to act on a device or firmware that does not exactly match a
+# verified profile field they depend on (requirement CORE-02).
+
+schema = 1
+id = "a402"
+name = "Samsung Digimax A402"
+aliases = ["Kenox D402"]
+alias_source = "S10 (OEM driver package Setup.ini names 'Digimax A402, KENOX D402')"
+
+[usb.mass_storage]
+status = "verified"
+experiment = "EXP-0001"
+vendor_id = 0x0839         # Samsung Techwin Co., Ltd (usb.ids)
+product_id = 0x003C        # not listed in usb.ids as of 2026-11-14
+bcd_device = 0x0100
+interface_class = 0x08     # Mass Storage
+interface_subclass = 0x06  # SCSI transparent command set
+interface_protocol = 0x50  # Bulk-Only Transport
+scsi_vendor = "SAMSUNG"
+scsi_product = "DIGITAL CAMERA"
+scsi_revision = "1.00"
+serial_number = "none reported (host OS synthesised an instance ID)"
+also_documented_by = "S10 (A402.inf: USB\\VID_0839&PID_003C, 'Samsung Digital Camera')"
+
+[usb.ptp]
+status = "unknown"
+notes = "PictBridge is documented (S1); PTP/still-image class enumeration not yet observed."
+
+[soc]
+status = "unknown"
+candidates = ["Sunplus SPCA536 (service manual schematic section title, S3 p.52)",
+              "Sunplus SPCA535 (service manual block diagram label, S3 p.50)"]
+isa = "unknown"
+notes = "Related SPCA533A is documented as having an 8032 core (S12); NOT assumed for this unit."
+
+[memory]
+status = "documented"
+source = "S3 block diagram (web p.50)"
+sdram = "256 Mbit"
+nand = "16 MB"
+eeprom = "93C66 (labelled SYSTEM)"
+flashrom = "unknown - schematic section titled 'FlashROM-NandFlash-SD' (S3 p.55) suggests a separate boot ROM; unverified"
+
+[storage]
+internal_flash_bytes = "16 MB (documented, S1)"
+card_slot = "SD / MMC (documented, S1); 512 MB guaranteed (documented)"
+controller_mode = "unknown (native SD vs SPI)"
+observed_cards = ["EXP-0001: ~512 MB SDSC card, 985088 sectors, MBR + FAT16 (type 0x06), 16 KiB clusters"]
+
+[firmware]
+status = "unknown"
+version = "unknown"
+update_file_label = "MEGA536 (S3 p.32, extension unknown)"
+base_hashes = []  # filled only from lawfully obtained, verified images
+
+[exposure]
+status = "documented"
+source = "S1 p.85 specifications"
+iso = [100, 200, 400]
+iso_auto = true
+aperture_f_numbers = [3.5, 7.0]
+aperture_mechanism = "unknown (iris vs ND/aperture plate not established)"
+shutter_range_s = { normal = [2.0, 0.001], night = [8.0, 0.001] }
+shutter_steps = "unknown - manuals give range only"
+ev_compensation = { range = 2.0, step = 0.5 }
+focus = "fixed focus, two-step mechanical switch (macro 0.2 m / normal 1.0 m-inf)"

@@ -1,0 +1,15 @@
+# Hypotheses
+
+A hypothesis is a claim we act on provisionally. Each one records how it will be tested and what
+would falsify it. Close a hypothesis by moving its result to [findings.md](findings.md).
+
+| ID | Hypothesis | Basis | Test that would settle it | Status |
+|---|---|---|---|---|
+| H-001 | The main SoC is an SPCA536 (or 536A), and "SPCA535" in the block diagram is a drafting error or an older revision label. | S3 section titles, `MEGA536` label | Read the chip marking from a **donor** board photo, or match update-file strings | open |
+| H-002 | The stock SD host path is SDSC-only: it never sends CMD8 / HCS, so SDHC cards stay busy in ACMD41 and are reported as card errors. | Era (2005; SDHC introduced 2006); `HostPolicy.legacy()` model | Insert a scratch SDHC card and record the stock error; later, find the ACMD41 argument in firmware | open |
+| H-003 | Stock firmware supports FAT12/16 only. A 2 GB SDSC card (FAT16, 32 KiB clusters) may work; FAT32 will not. | Era; 512 MB guarantee | SD-01 test plan with 1 GB and 2 GB SDSC cards, FAT16 vs FAT32 formatted on the host | open |
+| H-004 | "F7.0" is a second fixed aperture plate or ND filter moved by the LB1846M motor driver, not a continuously variable iris. | Two discrete values; motor driver present | Exposure baseline: an exact 2.0 EV difference with *no* depth-of-field change suggests ND; a DoF change suggests an aperture plate | open |
+| H-005 | The Night-mode routines already accept arbitrary (shutter, aperture) pairs. An M mode can reuse them, adding ISO selection and turning off auto override. | S2 | Baseline: is ISO selectable in Night mode? Do the settings persist? Do EXIF values match the selection? | open |
+| H-006 | The update file `MEGA536` contains the application firmware but possibly not the boot ROM, the EEPROM calibration or the NAND bad-block map, so it alone is not a recovery path. | Spec 7B; S3 copy-via-camera procedure | Obtain the file; compare its size with 16 MB NAND / boot ROM; look for container headers | open |
+| H-007 | The camera writes the update file through its USB mass-storage path to **internal flash or the card**, and the bootloader checks for it at power-on. That would explain why a card reader "does not work": the file may need to be in internal memory. | S3 "Do not use card Reader" | Observe which LUN is exposed with *no card* inserted (internal 16 MB) – a read-only observation needing only owner permission | open |
+| H-008 | The CPU is 8051-family (8032), like the SPCA533A. | S12 (related chip) | ISA determination from a firmware image, using several independent clues (reset vector, call/return statistics, code cross-references) | open |
