@@ -10,6 +10,7 @@ from __future__ import annotations
 import hashlib
 import math
 import re
+import struct
 from collections import Counter
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
@@ -191,7 +192,41 @@ def isa_hints(data: bytes) -> list[dict[str, Any]]:
                     "confidence": "heuristic",
                 }
             )
+    hints.extend(mips_hints(sample))
     return hints
+
+
+# MIPS32 major opcodes that dominate compiled code: lui, addiu, lw, sw, jal, beq, bne, ori
+_MIPS_COMMON = {0x0F, 0x09, 0x23, 0x2B, 0x03, 0x04, 0x05, 0x0D}
+_JR_RA = 0x03E00008  # jr $ra
+_KSEG_HI = (0x8000, 0x8001, 0x8002, 0x8003, 0xA000, 0xA001, 0xA002, 0xA003, 0xBFC0, 0xAC00,
+            0xAC01, 0xAC02, 0xAC03, 0xAC04, 0xAC05)  # fmt: skip
+
+
+def mips_hints(sample: bytes) -> list[dict[str, Any]]:
+    """MIPS32 statistics for both byte orders (relevant to H-013, R3000 reports)."""
+    out: list[dict[str, Any]] = []
+    n = len(sample) // 4
+    if n < 256:
+        return out
+    for order, name in (("<", "little-endian"), (">", "big-endian")):
+        words = struct.unpack(f"{order}{n}I", sample[: n * 4])
+        jr_ra = sum(1 for w in words if w == _JR_RA)
+        common = sum(1 for w in words if (w >> 26) in _MIPS_COMMON)
+        lui_kseg = sum(1 for w in words if (w >> 26) == 0x0F and (w & 0xFFFF) in _KSEG_HI)
+        ratio = common / n
+        if jr_ra >= 8 and ratio > 0.35:
+            out.append(
+                {
+                    "isa": f"MIPS32 ({name})",
+                    "clue": (
+                        f"{jr_ra} 'jr $ra' returns, {ratio:.0%} of words use common MIPS opcodes, "
+                        f"{lui_kseg} 'lui' loads of KSEG0/KSEG1 upper halves"
+                    ),
+                    "confidence": "heuristic",
+                }
+            )
+    return out
 
 
 def load(path: str | Path) -> bytes:

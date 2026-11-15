@@ -26,6 +26,7 @@ ship, will be versioned separately and scoped to exact base-firmware hashes.
 - `digimax exif`: privacy-preserving EXIF reader (stdlib) with `--summary` aggregation.
 
 - `card check` recognises a second embedded-formatter fingerprint (`EB 00 90`, EXP-0007).
+- `firmware inspect`: MIPS32 (little- and big-endian) ISA heuristic, for H-013.
 
 ### Fixed
 - Camera formatter fingerprint: the OEM name is eight NUL bytes, not spaces (EXP-0005).

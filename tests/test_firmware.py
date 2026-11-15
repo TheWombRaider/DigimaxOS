@@ -55,3 +55,36 @@ def test_entropy_bounds() -> None:
     assert firmware.shannon(b"") == 0
     assert firmware.shannon(b"\x00" * 100) == 0
     assert abs(firmware.shannon(bytes(range(256))) - 8.0) < 1e-9
+
+
+def _mips_blob(order: str) -> bytes:
+    import struct
+
+    # synthetic "function": lui t0,0xAC05 / addiu / lw / sw / jal / jr ra / nop
+    body = [0x3C08AC05, 0x25081498, 0x8D090000, 0xAD090004, 0x0C000100, 0x03E00008, 0x00000000]
+    words = body * 300
+    return struct.pack(f"{order}{len(words)}I", *words)
+
+
+def test_mips_little_endian_detected(tmp_path: Path) -> None:
+    p = tmp_path / "mips_le.bin"
+    p.write_bytes(_mips_blob("<"))
+    hints = firmware.inspect(p).isa_hints
+    assert any(h["isa"] == "MIPS32 (little-endian)" for h in hints)
+    assert not any(h["isa"] == "MIPS32 (big-endian)" for h in hints)
+
+
+def test_mips_big_endian_detected(tmp_path: Path) -> None:
+    p = tmp_path / "mips_be.bin"
+    p.write_bytes(_mips_blob(">"))
+    hints = firmware.inspect(p).isa_hints
+    assert any(h["isa"] == "MIPS32 (big-endian)" for h in hints)
+
+
+def test_random_data_is_not_mips(tmp_path: Path) -> None:
+    import random
+
+    rng = random.Random(1)
+    p = tmp_path / "rand.bin"
+    p.write_bytes(bytes(rng.getrandbits(8) for _ in range(65536)))
+    assert not any("MIPS" in h["isa"] for h in firmware.inspect(p).isa_hints)
