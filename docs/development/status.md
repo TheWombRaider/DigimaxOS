@@ -17,23 +17,25 @@ official Samsung site offers none (F-030), and public searches found none (F-032
 been written to the camera.**
 
 **Host tooling:** `digimax` CLI v0.1.0.dev0, stdlib only. 97 tests pass locally (unit, property-based
-and fixture tests, including dosfstools cross-checks). CI is defined in `.github/workflows/ci.yml`.
+and fixture tests, including dosfstools cross-checks). CI (`.github/workflows/ci.yml`) is green on Python 3.11/3.12/3.13 with 97 passed each.
+
+**Repository:** https://github.com/TheWombRaider/DigimaxOS. Issues #1–#15 are the backlog and #16 is the pinned rolling checkpoint. `main` is protected: required checks, linear history, no force-push. Required reviews are off while there is a single maintainer; CODEOWNERS and the PR checklist cover firmware and hardware-write review.
 
 ## Highest-value next actions
 
-1. **Firmware version** (owner approval needed): read the EXIF `Software`/`Make`/`Model` tags from
+1. **Firmware version** ([#2](https://github.com/TheWombRaider/DigimaxOS/issues/2), owner approval needed): read the EXIF `Software`/`Make`/`Model` tags from
    one camera-made JPEG in place, or read the version from the camera's setup menu. This sets the
    search target for `MEGA536`.
-2. **Firmware acquisition** (#issue "Locate MEGA536"): Wayback Machine captures of
+2. **Firmware acquisition** ([#1](https://github.com/TheWombRaider/DigimaxOS/issues/1)): Wayback Machine captures of
    samsungcamera.com/service, samsungimaging.com, Korean Kenox support pages and driver CDs. Record
    the provenance of anything found, hash it and keep it private.
-3. **Internal-memory LUN and boot sector** (owner approval needed): enumerate with no card
+3. **Internal-memory LUN and boot sector** ([#12](https://github.com/TheWombRaider/DigimaxOS/issues/12), owner approval needed): enumerate with no card
    inserted (H-007); read only sectors 0 and 32 of the card (formatter OEM name, F-022).
-4. **Stock Night-mode baseline** (owner present, scratch card): Phase 1A of the
+4. **Stock Night-mode baseline** ([#5](https://github.com/TheWombRaider/DigimaxOS/issues/5), owner present, scratch card): Phase 1A of the
    [exposure test plan](../test-plans/exposure-baseline.md). It needs no captures, only menu
    observation, and gives the real shutter steps.
-5. **Schematic transcription** (offline): S3 web pp. 52–56, the SD/NAND/EEPROM/strap net names.
-6. **Test media** (owner decision / purchase): expendable SDSC 1 GB and 2 GB cards and an SDHC
+5. **Schematic transcription** ([#13](https://github.com/TheWombRaider/DigimaxOS/issues/13), offline): S3 web pp. 52–56, the SD/NAND/EEPROM/strap net names.
+6. **Test media** ([#8](https://github.com/TheWombRaider/DigimaxOS/issues/8), owner decision / purchase): expendable SDSC 1 GB and 2 GB cards and an SDHC
    4 GB card for SD-01 and H-002.
 
 ## Blocked / waiting on the owner
@@ -72,4 +74,4 @@ and fixture tests, including dosfstools cross-checks). CI is defined in `.github
 - EXP-0001: identified the camera over USB on the Windows host (read-only).
 - Built the host CLI, the SD reference model and simulator, the FAT/DCF analyser, the firmware
   inspector, the exposure model and M-mode mock, the Windows collector, CI, the issue forms,
-  labels, milestones and the initial issue backlog.
+  labels (spec section 9), milestones v0.1–v1.0 and issues #1–#16.
