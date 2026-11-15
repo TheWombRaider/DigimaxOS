@@ -1,0 +1,7 @@
+# Firmware, patches, recovery and anything that could write to hardware need maintainer review.
+*                         @TheWombRaider
+/firmware/                @TheWombRaider
+/profiles/                @TheWombRaider
+/docs/recovery/           @TheWombRaider
+/scripts/                 @TheWombRaider
+/.github/                 @TheWombRaider

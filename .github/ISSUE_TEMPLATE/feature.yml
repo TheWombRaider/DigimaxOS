@@ -1,0 +1,33 @@
+name: Feature proposal
+description: Propose a capability or improvement
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: Features must not require hardware the camera lacks. See ROADMAP.md for what is out of scope.
+  - type: input
+    id: requirement
+    attributes:
+      label: Related requirement ID
+      description: e.g. SD-02, EXP-01, UI-01 (see the specification section 3), or "new"
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem / motivation
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and feasibility
+      description: What do we know (sources, findings) that makes this possible? What is unknown?
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: How would we verify it on hardware?

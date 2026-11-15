@@ -1,0 +1,53 @@
+name: Experiment report
+description: Record a measurement or observation (stock or modified), including negative results
+labels: ["research"]
+body:
+  - type: markdown
+    attributes:
+      value: Follow docs/evidence/experiments/README.md. Sanitize everything (no photos of people, serials, OEM bytes).
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind
+      options: [simulated, observed on stock, observed on modified hardware, blocked]
+    validations:
+      required: true
+  - type: input
+    id: device
+    attributes:
+      label: Device / profile and firmware hash
+    validations:
+      required: true
+  - type: textarea
+    id: setup
+    attributes:
+      label: Instrumentation, power and media
+    validations:
+      required: true
+  - type: textarea
+    id: procedure
+    attributes:
+      label: Procedure (exact commands / button presses)
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual result
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence (sanitized) and hashes of private raw files
+  - type: checkboxes
+    id: approval
+    attributes:
+      label: Safety
+      options:
+        - label: No writes, flashing, calibration or test-mode actions were performed without explicit owner approval
+          required: true

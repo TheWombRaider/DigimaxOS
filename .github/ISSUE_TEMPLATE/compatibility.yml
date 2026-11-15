@@ -1,0 +1,54 @@
+name: Compatibility report
+description: Report a camera model, firmware or SD card result
+labels: ["needs reproduction"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Please REDACT serial numbers and personal data. Never attach photos, firmware files or EXIF owner fields.
+        Run `digimax discover --json` (Linux) or `scripts/windows/Get-DigimaxInfo.ps1` (Windows) and review the output before pasting.
+  - type: input
+    id: model
+    attributes:
+      label: Camera model (as printed on the body)
+      placeholder: Digimax A402 / Kenox D402 / ...
+    validations:
+      required: true
+  - type: input
+    id: usbid
+    attributes:
+      label: USB VID:PID and bcdDevice
+      placeholder: "0839:003c bcd 0100"
+  - type: input
+    id: firmware
+    attributes:
+      label: Firmware version and/or SHA-256 of a lawfully obtained image
+      placeholder: unknown
+  - type: input
+    id: board
+    attributes:
+      label: Board markings (only if visible without disassembly)
+  - type: textarea
+    id: card
+    attributes:
+      label: Card details
+      description: Brand, model, capacity label, host-reported sector count, SDSC/SDHC, filesystem, who formatted it
+  - type: dropdown
+    id: firmware_kind
+    attributes:
+      label: Camera firmware
+      options: [stock, DigimaxOS-modified, unknown]
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: What happened
+      description: Recognition, format, capture, playback, USB transfer, full-card behaviour, error messages
+    validations:
+      required: true
+  - type: textarea
+    id: report
+    attributes:
+      label: Tool output (redacted)
+      render: json

@@ -1,0 +1,32 @@
+name: Bug report (host tools)
+description: Something in the digimax CLI, scripts or docs is wrong
+labels: ["needs reproduction"]
+body:
+  - type: input
+    id: version
+    attributes:
+      label: digimax version / commit
+    validations:
+      required: true
+  - type: input
+    id: host
+    attributes:
+      label: Host OS and Python version
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce (exact commands)
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected vs actual result
+    validations:
+      required: true
+  - type: textarea
+    id: inputs
+    attributes:
+      label: Inputs
+      description: Do NOT attach firmware or card images; describe them or share a synthetic reproduction.
