@@ -36,8 +36,9 @@ firmware and hardware-write review.
    with the concrete target `M4051S` / `MEGA536`. Use Wayback captures of samsungcamera.com/service
    and samsungimaging.com, Kenox (Korea) support, and driver CDs. Also gather `Software` tags from
    public A402/D402 photos to enumerate the builds (H-009).
-2. **Stock Night-mode menu walk-through** ([#5](https://github.com/TheWombRaider/DigimaxOS/issues/5)):
-   the owner is at the camera. No captures are needed, and the result gives the real shutter steps.
+2. **Finish the Night-mode walk-through** ([#5](https://github.com/TheWombRaider/DigimaxOS/issues/5)):
+   the shutter steps are recorded (EXP-0004: AUTO, 1/8 to 8 s; 1/4 to be confirmed). Still to do:
+   aperture values, ISO/EV/WB availability in Night mode, and persistence.
 3. **Sectors 1–56 of internal memory** (H-011): owner approval needed. They are outside the
    filesystem and hold no photos.
 4. **Card boot sector** (F-022): when the SD card is back in, read sectors 0 and 32 (owner
@@ -97,4 +98,7 @@ firmware and hardware-write review.
   2006 Wikimedia Commons A402 photo. A `-0520` build is reported but unverified.
 - Added a formatter fingerprint and cluster-alignment check to `digimax card check`, plus FAT12
   fixtures reproducing the camera's exact internal layout (3-sector FATs, 782 clusters).
+- EXP-0004: the owner walked the Night-mode shutter menu. It offers only AUTO and 8 s to 1/8 s, so
+  fast speeds are not user-selectable in stock (F-044, new H-012). The exposure model now marks
+  those values *observed*.
 

@@ -28,14 +28,22 @@ def test_matrix_covers_documented_space() -> None:
     assert {r["aperture"] for r in rows} == {3.5, 7.0}
     assert max(r["shutter_s"] for r in rows) == 8
     assert min(r["shutter_s"] for r in rows) == 0.001
-    assert all(r["status"] == "candidate" for r in rows)  # shutter steps unmeasured
+    by_shutter = {r["shutter"]: r for r in rows}
+    # EXP-0004: stock Night-mode menu values are observed (not yet timed); fast steps are candidates
+    for seen in ('8"', '6"', '4"', '3"', '2"', '1"', "1/2", "1/8"):
+        assert by_shutter[seen]["shutter_status"] == "observed"
+        assert by_shutter[seen]["stock_user_selectable"] is True
+    for cand in ("1/4", "1/15", "1/60", "1/1000"):
+        assert by_shutter[cand]["shutter_status"] == "candidate"
+    # overall status is the weakest of shutter / aperture / ISO
+    assert {r["status"] for r in rows} == {"candidate", "documented"}
     assert {r["stock_mode_needed"] for r in rows if r["shutter_s"] > 2} == {"night"}
 
 
 def test_format_shutter() -> None:
     assert format_shutter(Fraction(1, 1000)) == "1/1000"
     assert format_shutter(Fraction(8)) == '8"'
-    assert format_shutter(Fraction(3, 2)) == '1.5"'
+    assert format_shutter(Fraction(3)) == '3"'
 
 
 def _ui() -> MModeUI:

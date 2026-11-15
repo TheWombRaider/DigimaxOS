@@ -351,13 +351,18 @@ def cmd_exposure_table(args: argparse.Namespace) -> int:
     rows = cap.matrix()
 
     def human() -> None:
-        print("Documented A402 exposure space (S1 p.85). Shutter steps are CANDIDATES until")
-        print("measured; see docs/test-plans/exposure-baseline.md.\n")
-        print(f"{'shutter':>8} {'f/':>4} {'ISO':>4} {'EV100':>6}  stock mode  status")
+        print(
+            "A402 exposure space: range from S1 p.85; shutter values 'observed' are selectable in"
+        )
+        print(
+            "the stock Night-mode menu (EXP-0004, timing not yet measured); 'candidate' values are"
+        )
+        print("unconfirmed. See docs/test-plans/exposure-baseline.md.\n")
+        print(f"{'shutter':>8} {'f/':>4} {'ISO':>4} {'EV100':>6}  {'shutter status':<15} overall")
         for r in rows:
             print(
                 f"{r['shutter']:>8} {r['aperture']:>4} {r['iso']:>4} {r['ev100']:>6}  "
-                f"{r['stock_mode_needed']:<10}  {r['status']}"
+                f"{r['shutter_status']:<15} {r['status']}"
             )
 
     emit(args, rows, human)

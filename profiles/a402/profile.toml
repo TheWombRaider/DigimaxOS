@@ -92,5 +92,6 @@ aperture_f_numbers = [3.5, 7.0]
 aperture_mechanism = "unknown (iris vs ND/aperture plate not established)"
 shutter_range_s = { normal = [2.0, 0.001], night = [8.0, 0.001] }
 shutter_steps = "unknown - manuals give range only"
+night_mode_shutter_menu = { status = "observed", experiment = "EXP-0004", values = ["AUTO", "1/8", "1/2", "1", "2", "3", "4", "6", "8"], unconfirmed = ["1/4"] }
 ev_compensation = { range = 2.0, step = 0.5 }
 focus = "fixed focus, two-step mechanical switch (macro 0.2 m / normal 1.0 m-inf)"

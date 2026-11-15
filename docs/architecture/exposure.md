@@ -7,8 +7,12 @@
   screen opened with **+/-**, using LEFT/RIGHT for shutter and UP/DOWN for aperture, then +/- to
   save (S2).
 - Outside Night mode the slowest shutter is 2 s.
-- The selectable shutter **steps** are not documented. `digimax exposure table` uses a
-  *candidate* list until the baseline measures them.
+- The stock Night-mode menu offers **AUTO, 1/8, 1/2, 1, 2, 3, 4, 6 and 8 s** (EXP-0004; 1/4 s
+  unconfirmed). Manual control covers only the slow end. 1/15 s to 1/1000 s exist only within the
+  documented range, presumably reached by auto-exposure (H-012). `digimax exposure table` marks
+  the menu values *observed* and the rest *candidate*.
+- **Implication:** M mode needs the auto-exposure shutter routine for fast speeds, not just the
+  Night-mode handler. Characterise the shutter (H-012) before offering those speeds.
 
 ## Proposal
 

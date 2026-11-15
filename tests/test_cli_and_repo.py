@@ -68,7 +68,7 @@ def test_sd_address_rejects_out_of_range(capsys) -> None:
 
 def test_exposure_commands(capsys) -> None:
     code, out = run(capsys, "--json", "exposure", "table")
-    assert code == 0 and len(json.loads(out)) == 17 * 2 * 3
+    assert code == 0 and len(json.loads(out)) == 16 * 2 * 3
     code, out = run(capsys, "exposure", "mock", "plusminus", "right", "plusminus")
     assert code == 0 and "1/125" in out
 

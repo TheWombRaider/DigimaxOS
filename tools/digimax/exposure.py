@@ -7,10 +7,13 @@ Nothing here talks to a camera. It encodes:
 * the navigation state machine proposed in docs/architecture/exposure.md, so
   the UI can be reviewed and tested before any firmware work (spec 5.2).
 
-Shutter *steps* are not documented anywhere we have found - only the 8 s to
-1/1000 s range. The step list below is therefore a CANDIDATE set of full and
-third stops that must be replaced by the values measured in the stock Night
-mode baseline (docs/test-plans/exposure-baseline.md) before any firmware use.
+Shutter steps: the manuals give only the 8 s to 1/1000 s range. The stock
+Night-mode menu (EXP-0004) offers AUTO plus 8, 6, 4, 3, 2, 1, 1/2 and 1/8 s
+(1/4 s awaiting confirmation). Those values are OBSERVED, meaning they are
+selectable in the stock UI, but their timing has not been measured yet. Faster
+steps appear only in the specification range (presumably reached by
+auto-exposure) and remain CANDIDATES until measured
+(docs/test-plans/exposure-baseline.md).
 """
 
 from __future__ import annotations
@@ -20,28 +23,17 @@ from dataclasses import dataclass, field, replace
 from enum import StrEnum
 from fractions import Fraction
 
-# Candidate shutter steps (seconds), slowest -> fastest, within 8 s .. 1/1000 s.
+# Shutter steps (seconds), slowest -> fastest, within 8 s .. 1/1000 s.
 CANDIDATE_SHUTTERS: tuple[Fraction, ...] = tuple(
     Fraction(x)
     for x in (
-        8,
-        6,
-        4,
-        3,
-        2,
-        "3/2",
-        1,
-        "1/2",
-        "1/4",
-        "1/8",
-        "1/15",
-        "1/30",
-        "1/60",
-        "1/125",
-        "1/250",
-        "1/500",
-        "1/1000",
+        8, 6, 4, 3, 2, 1, "1/2", "1/4", "1/8",
+        "1/15", "1/30", "1/60", "1/125", "1/250", "1/500", "1/1000",
     )
+)  # fmt: skip
+# Values the owner saw in the stock Night-mode +/- menu (EXP-0004). The menu also offers AUTO.
+NIGHT_MODE_OBSERVED: frozenset[Fraction] = frozenset(
+    Fraction(x) for x in (8, 6, 4, 3, 2, 1, "1/2", "1/8")
 )
 DOCUMENTED_APERTURES: tuple[float, ...] = (3.5, 7.0)
 DOCUMENTED_ISOS: tuple[int, ...] = (100, 200, 400)
@@ -52,9 +44,17 @@ FASTEST = Fraction(1, 1000)
 
 
 class Status(StrEnum):
-    DOCUMENTED = "documented"  # stated by an OEM document
     CANDIDATE = "candidate"  # plausible, not documented or measured
+    DOCUMENTED = "documented"  # stated by an OEM document
+    OBSERVED = "observed"  # seen in the stock UI on the reference unit, not yet measured
     VERIFIED = "verified"  # measured on hardware, experiment ID recorded
+
+
+_ORDER = [Status.CANDIDATE, Status.DOCUMENTED, Status.OBSERVED, Status.VERIFIED]
+
+
+def _weakest(*statuses: Status) -> Status:
+    return min(statuses, key=_ORDER.index)
 
 
 def format_shutter(t: Fraction) -> str:
@@ -72,6 +72,7 @@ def ev100(shutter: Fraction, aperture: float, iso: int) -> float:
 class Capability:
     shutters: tuple[Fraction, ...] = CANDIDATE_SHUTTERS
     shutter_status: Status = Status.CANDIDATE
+    observed_shutters: frozenset[Fraction] = NIGHT_MODE_OBSERVED
     apertures: tuple[float, ...] = DOCUMENTED_APERTURES
     aperture_status: Status = Status.DOCUMENTED
     isos: tuple[int, ...] = DOCUMENTED_ISOS
@@ -102,12 +103,10 @@ class Capability:
             for n in self.apertures:
                 for iso in self.isos:
                     s = Settings(t, n, iso)
-                    status = min(
-                        (self.shutter_status, self.aperture_status, self.iso_status),
-                        key=lambda st: [Status.CANDIDATE, Status.DOCUMENTED, Status.VERIFIED].index(
-                            st
-                        ),
+                    t_status = (
+                        Status.OBSERVED if t in self.observed_shutters else self.shutter_status
                     )
+                    status = _weakest(t_status, self.aperture_status, self.iso_status)
                     rows.append(
                         {
                             "shutter": format_shutter(t),
@@ -116,6 +115,8 @@ class Capability:
                             "iso": iso,
                             "ev100": round(ev100(t, n, iso), 2),
                             "stock_mode_needed": "night" if t > NORMAL_SLOWEST else "any",
+                            "stock_user_selectable": t in self.observed_shutters,
+                            "shutter_status": t_status.value,
                             "status": status.value,
                             "problems": self.validate(s),
                         }

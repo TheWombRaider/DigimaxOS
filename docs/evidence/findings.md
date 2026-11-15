@@ -61,5 +61,6 @@ Each finding has an ID, a confidence level and its evidence. Do not delete entri
 |---|---|---|---|
 | F-040 | Documented exposure space: shutter 2–1/1000 s (8–1/1000 s in Night mode), F3.5 and F7.0, ISO Auto/100/200/400, EV ±2 in 0.5 steps, multi/spot metering. | documented | S1 |
 | F-041 | Night mode lets the user choose shutter (LEFT/RIGHT) and aperture (UP/DOWN) from a +/- screen. The individual shutter steps are **not documented** in the text we have. | documented | S2 |
+| F-044 | The stock Night-mode shutter menu offers **AUTO, 1/8, 1/2, 1, 2, 3, 4, 6, 8 s** (1/4 s unconfirmed). Manual shutter control is limited to slow speeds; nothing faster than 1/8 s is user-selectable. | observed (UI, owner report) | EXP-0004 |
 | F-042 | The lens is fixed focus with a two-position mechanical switch. There is no focus motor to control. | documented | S1 |
 | F-043 | The block diagram includes a motor driver (Sanyo LB1846M). On a fixed-focus, fixed-focal-length camera this probably drives the shutter and/or the aperture/ND mechanism, so "F7" may be an aperture plate or ND rather than an iris. This is a hypothesis (H-004). | inferred | S3 |
